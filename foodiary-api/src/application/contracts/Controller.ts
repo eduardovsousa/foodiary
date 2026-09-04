@@ -1,7 +1,33 @@
-export interface IController<TBody = undefined> {
-  handle(params: IController.Request): Promise<IController.Response<TBody>>;
+import type { z } from 'zod/mini';
+
+export abstract class Controller<TBody = undefined> {
+  protected schema?: z.ZodMiniType;
+
+  protected abstract handle(
+    params: Controller.Request<TBody>
+  ): Promise<Controller.Response<TBody>>;
+
+  public execute(
+    request: Controller.Request<TBody>,
+  ): Promise<Controller.Response<TBody>> {
+    const body = this.validateBody(request.body);
+
+    return this.handle({
+      ...request,
+      body,
+    });
+  }
+
+  private validateBody(body: TBody): TBody {
+    if (!this.schema) {
+      return body;
+    }
+
+    return this.schema.parse(body) as TBody;
+  }
 }
-export namespace IController {
+
+export namespace Controller {
   export type Request<
     TBody = Record<string, unknown>,
     TParams = Record<string, unknown>,
@@ -11,8 +37,9 @@ export namespace IController {
     params: TParams;
     queryParams: TQueryParams;
   };
+
   export type Response<TBody = undefined> = {
     statusCode: number;
     body?: TBody;
-  }
+  };
 }
