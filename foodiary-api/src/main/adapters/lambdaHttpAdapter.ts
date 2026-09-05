@@ -1,4 +1,4 @@
-import * as z from 'zod/mini';
+import * as z from 'zod/v4/core';
 import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyResultV2,
@@ -32,7 +32,7 @@ export function lambdaHttpAdapter(
             : undefined,
       };
     } catch (error) {
-      if (error instanceof z.core.$ZodError) {
+      if (error instanceof z.$ZodError) {
         return {
           statusCode: 400,
           body: JSON.stringify({

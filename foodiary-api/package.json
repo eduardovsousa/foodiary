@@ -23,6 +23,7 @@
     "typescript-eslint": "^8.69.0"
   },
   "dependencies": {
+    "reflect-metadata": "^0.2.2",
     "zod": "^4.5.4"
   }
 }

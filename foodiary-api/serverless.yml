@@ -16,10 +16,9 @@ build:
     bundle: true
     minify: true
     sourcemap: false
-    exclude:
-      - "@aws-sdk/*"
+    metafile: true
     external:
-      - "@aws-sdk/*"
+      - '@aws-sdk/*'
 
 functions:
   hello:

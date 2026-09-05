@@ -1,4 +1,5 @@
-import type { z } from 'zod/mini';
+import * as z from 'zod/mini';
+import { getSchema } from '../../kernel/decoratos/Schema.js';
 
 export abstract class Controller<TBody = undefined> {
   protected schema?: z.ZodMiniType;
@@ -19,11 +20,13 @@ export abstract class Controller<TBody = undefined> {
   }
 
   private validateBody(body: TBody): TBody {
-    if (!this.schema) {
+    const schema = getSchema(this);
+
+    if (!schema) {
       return body;
     }
 
-    return this.schema.parse(body) as TBody;
+    return schema.parse(body) as TBody;
   }
 }
 

@@ -1,7 +1,9 @@
 
+import { Schema } from '../../kernel/decoratos/Schema.js';
 import { Controller } from '../contracts/Controller.js';
 import { helloSchema, type HelloBody } from './schemas/helloSchema.js';
 
+@Schema(helloSchema)
 export class HelloController extends Controller<unknown> {
   protected override schema = helloSchema;
 
