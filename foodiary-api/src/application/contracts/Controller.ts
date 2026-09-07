@@ -1,5 +1,5 @@
+import { getSchema } from '@kernel/decoratos/Schema.js';
 import * as z from 'zod/mini';
-import { getSchema } from '../../kernel/decoratos/Schema.js';
 
 export abstract class Controller<TBody = undefined> {
   protected schema?: z.ZodMiniType;

@@ -1,4 +1,4 @@
-import type { ErrorCode } from '../../application/errors/ErrorCode.js';
+import type { ErrorCode } from '@application/errors/ErrorCode.js';
 
 interface ILambdaErrorResponseParams {
   statusCode: number;

@@ -1,14 +1,13 @@
-import * as z from 'zod/v4/core';
+import type { Controller } from '@application/contracts/Controller.js';
+import { ErrorCode } from '@application/errors/ErrorCode.js';
+import { HttpError } from '@application/errors/htp/HttpError.js';
+import { lambdaBodyParser } from '@main/utils/lambdaBodyParser.js';
+import { lambdaErrorResponse } from '@main/utils/lambdaErrorResponse.js';
 import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';
-
-import { lambdaBodyParser } from '../utils/lambdaBodyParser.js';
-import type { Controller } from '../../application/contracts/Controller.js';
-import { ErrorCode } from '../../application/errors/ErrorCode.js';
-import { lambdaErrorResponse } from '../utils/lambdaErrorResponse.js';
-import { HttpError } from '../../application/errors/htp/HttpError.js';
+import * as z from 'zod/v4/core';
 
 export function lambdaHttpAdapter(
   controller: Controller<unknown>,
