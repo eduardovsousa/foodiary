@@ -6,6 +6,9 @@ import type {
 
 import { lambdaBodyParser } from '../utils/lambdaBodyParser.js';
 import type { Controller } from '../../application/contracts/Controller.js';
+import { ErrorCode } from '../../application/errors/ErrorCode.js';
+import { lambdaErrorResponse } from '../utils/lambdaErrorResponse.js';
+import { HttpError } from '../../application/errors/htp/HttpError.js';
 
 export function lambdaHttpAdapter(
   controller: Controller<unknown>,
@@ -33,30 +36,25 @@ export function lambdaHttpAdapter(
       };
     } catch (error) {
       if (error instanceof z.$ZodError) {
-        return {
+        return lambdaErrorResponse({
           statusCode: 400,
-          body: JSON.stringify({
-            error: {
-              code: 'VALIDATION',
-              message: 'Validation failed',
-              issues: error.issues.map((issue) => ({
-                field: issue.path.join('.'),
-                message: issue.message,
-              })),
-            },
-          }),
-        };
+          code: ErrorCode.VALIDATION,
+          message: error.issues.map(issue => ({
+            field: issue.path.join('.'),
+            error: issue.message,
+          })),
+        });
       }
 
-      return {
+      if (error instanceof HttpError) {
+        return lambdaErrorResponse(error);
+      }
+
+      return lambdaErrorResponse({
         statusCode: 500,
-        body: JSON.stringify({
-          error: {
-            code: 'INTERNAL_SERVER_ERROR',
-            message: 'Internal server error.',
-          },
-        }),
-      };
+        code: ErrorCode.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error.',
+      });
     }
   };
 }
