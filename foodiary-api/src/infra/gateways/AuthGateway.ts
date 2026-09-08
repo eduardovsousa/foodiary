@@ -1,7 +1,9 @@
+
 import { InitiateAuthCommand, SignUpCommand } from '@aws-sdk/client-cognito-identity-provider';
 import { cognitoClient } from '@infra/clients/cognitoClient.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
+import { createHmac } from 'node:crypto';
 
 @Injectable(AppConfig)
 export class AuthGateway {
@@ -12,9 +14,10 @@ export class AuthGateway {
     password,
   }: AuthGateway.SignUpParams): Promise<AuthGateway.SignUpResult> {
     const command = new SignUpCommand({
-      ClientId: this.appConfig.auth.cognito.clientId,
+      ClientId: this.appConfig.auth.cognito.client.id,
       Username: email,
       Password: password,
+      SecretHash: this.getSecretHash(email),
     });
 
     const { UserSub: externalId } = await cognitoClient.send(command);
@@ -31,10 +34,11 @@ export class AuthGateway {
   async signIn({ email, password }: AuthGateway.SignInParams): Promise<AuthGateway.SignInResult> {
     const command = new InitiateAuthCommand({
       AuthFlow: 'USER_PASSWORD_AUTH',
-      ClientId: this.appConfig.auth.cognito.clientId,
+      ClientId: this.appConfig.auth.cognito.client.id,
       AuthParameters: {
         USERNAME: email,
         PASSWORD: password,
+        SECRET_HASH: this.getSecretHash(email),
       },
     });
 
@@ -48,6 +52,14 @@ export class AuthGateway {
       accessToken: AuthenticationResult.AccessToken,
       refreshToken: AuthenticationResult.RefreshToken,
     };
+  }
+
+  private getSecretHash(email: string): string {
+    const { id, secret } = this.appConfig.auth.cognito.client;
+
+    return createHmac('SHA256', secret)
+      .update(`${email}${id}`)
+      .digest('base64');
   }
 };
 
