@@ -16,9 +16,11 @@ build:
     bundle: true
     minify: true
     sourcemap: false
-    metafile: true
     external:
-      - '@aws-sdk/*'
+      - "@aws-sdk/*"
+    outExtension:
+      ".js": ".mjs"
+    configFile: ./esbuild.config.js
 
 functions:
   hello:

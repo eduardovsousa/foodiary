@@ -1,3 +1,6 @@
+import { Injectable } from '@kernel/decoratos/Injectable.js';
+
+@Injectable()
 export class HelloUseCase {
   async execute(input: HelloUseCase.Input): Promise<HelloUseCase.Output> {
     return {
