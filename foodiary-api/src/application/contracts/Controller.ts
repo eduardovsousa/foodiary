@@ -1,16 +1,19 @@
 import { getSchema } from '@kernel/decoratos/Schema.js';
 import * as z from 'zod/mini';
 
-export abstract class Controller<TBody = undefined> {
+export abstract class Controller<
+  TResponseBody = undefined,
+  TRequestBody = Record<string, unknown>,
+> {
   protected schema?: z.ZodMiniType;
 
   protected abstract handle(
-    params: Controller.Request<TBody>
-  ): Promise<Controller.Response<TBody>>;
+    request: Controller.Request<TRequestBody>
+  ): Promise<Controller.Response<TResponseBody>>;
 
   public execute(
-    request: Controller.Request<TBody>,
-  ): Promise<Controller.Response<TBody>> {
+    request: Controller.Request<TRequestBody>,
+  ): Promise<Controller.Response<TResponseBody>> {
     const body = this.validateBody(request.body);
 
     return this.handle({
@@ -19,14 +22,14 @@ export abstract class Controller<TBody = undefined> {
     });
   }
 
-  private validateBody(body: TBody): TBody {
+  private validateBody(body: TRequestBody): TRequestBody {
     const schema = getSchema(this);
 
     if (!schema) {
       return body;
     }
 
-    return schema.parse(body) as TBody;
+    return schema.parse(body) as TRequestBody;
   }
 }
 

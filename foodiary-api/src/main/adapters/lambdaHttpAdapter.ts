@@ -10,7 +10,7 @@ import type {
 import * as z from 'zod/v4/core';
 
 export function lambdaHttpAdapter(
-  controller: Controller<unknown>,
+  controller: Controller<unknown, unknown>,
 ) {
   return async (
     event: APIGatewayProxyEventV2,
