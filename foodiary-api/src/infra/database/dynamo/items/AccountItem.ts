@@ -1,4 +1,4 @@
-import type { Account } from '@application/entities/Account.js';
+import { Account } from '@application/entities/Account.js';
 
 export class AccountItem {
   private readonly type = 'Account';
@@ -26,6 +26,15 @@ export class AccountItem {
     return new AccountItem({
       ...account,
       createdAt: account.createdAt.toISOString(),
+    });
+  }
+
+  static toEntity(accountItem: AccountItem.ItemType) {
+    return new Account({
+      id: accountItem.id,
+      email: accountItem.email,
+      externalId: accountItem.externalId,
+      createdAt: new Date(accountItem.createdAt),
     });
   }
 

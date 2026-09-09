@@ -1,4 +1,5 @@
 import { Controller } from '@application/contracts/Controller.js';
+import { ApplicationError } from '@application/errors/application/ApplicationError.js';
 import { ErrorCode } from '@application/errors/ErrorCode.js';
 import { HttpError } from '@application/errors/htp/HttpError.js';
 import { lambdaBodyParser } from '@main/utils/lambdaBodyParser.js';
@@ -47,6 +48,14 @@ export function lambdaHttpAdapter(
 
       if (error instanceof HttpError) {
         return lambdaErrorResponse(error);
+      }
+
+      if (error instanceof ApplicationError) {
+        return lambdaErrorResponse({
+          statusCode: error.statusCode ?? 400,
+          code: error.code,
+          message: error.message
+        });
       }
 
       // eslint-disable-next-line no-console
