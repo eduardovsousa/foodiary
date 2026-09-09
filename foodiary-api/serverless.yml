@@ -26,6 +26,9 @@ build:
     sourcemap: false
     external:
       - "@aws-sdk/*"
+      - "node:*"
+      - "crypto"
+      - "ksuid"
     outExtension:
       ".js": ".mjs"
     configFile: ./esbuild.config.js
