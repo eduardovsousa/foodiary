@@ -1,5 +1,5 @@
 import { Controller } from '@application/contracts/Controller.js';
-import { SignUpUseCase } from '@application/useCases/SignUpUseCase.js';
+import { SignUpUseCase } from '@application/useCases/auth/SignUpUseCase.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
 import { Schema } from '@kernel/decoratos/Schema.js';
 import { signUpSchema, type SignUpBody } from './schemas/signUpSchema.js';
