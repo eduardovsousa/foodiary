@@ -34,8 +34,6 @@ build:
     sourcemap: false
     external:
       - "@aws-sdk/*"
-      - "node:*"
-      - "crypto"
       - "ksuid"
     outExtension:
       ".js": ".mjs"
@@ -43,6 +41,7 @@ build:
 
 functions:
   - ${file(./sls/functions/auth.yml)}
+  - ${file(./sls/functions/meals.yml)}
 
 resources:
   - ${file(./sls/resources/UserPool.yml)}

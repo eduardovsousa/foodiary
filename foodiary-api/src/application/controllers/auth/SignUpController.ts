@@ -2,12 +2,12 @@ import { Controller } from '@application/contracts/Controller.js';
 import { SignUpUseCase } from '@application/useCases/auth/SignUpUseCase.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
 import { Schema } from '@kernel/decoratos/Schema.js';
-import { signUpSchema, type SignUpBody } from './schemas/signUpSchema.js';
+import { SignUpBody, signUpSchema } from './schemas/signUpSchema.js';
 
 @Injectable(SignUpUseCase)
 @Schema(signUpSchema)
 export class SignUpController extends Controller<
-  SignUpController.Response,
+  'public', SignUpController.Response,
   SignUpBody
 > {
   constructor(private readonly signUpUseCase: SignUpUseCase) {
@@ -15,7 +15,7 @@ export class SignUpController extends Controller<
   }
 
   protected override async handle(
-    { body }: Controller.Request<SignUpBody>,
+    { body }: Controller.Request<'public', SignUpBody>,
   ): Promise<Controller.Response<SignUpController.Response>> {
     const { account } = body;
 

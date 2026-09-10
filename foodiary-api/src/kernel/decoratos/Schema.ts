@@ -1,4 +1,4 @@
-import type { z } from 'zod/mini';
+import { z } from 'zod/mini';
 
 const SCHEMA_METADATA_KEY = 'custom:schema';
 

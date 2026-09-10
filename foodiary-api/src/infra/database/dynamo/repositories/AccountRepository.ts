@@ -1,4 +1,4 @@
-import type { Account } from '@application/entities/Account.js';
+import { Account } from '@application/entities/Account.js';
 import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { dynamoClient } from '@infra/clients/dynamoClient.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
@@ -23,7 +23,7 @@ export class AccountRepository {
         ':GSI1PK': AccountItem.getGSI1PK(email),
         ':GSI1SK': AccountItem.getGSI1SK(email),
       },
-    })
+    });
 
     const { Items = [] } = await dynamoClient.send(command);
     const account = Items[0] as AccountItem.ItemType | undefined;

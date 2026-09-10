@@ -7,10 +7,4 @@ export default () => ({
       forceEsm: true,
     }),
   ],
-
-  external: [
-    'node:*',
-    'crypto',
-    'ksuid',
-  ],
 });
