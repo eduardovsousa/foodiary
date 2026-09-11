@@ -1,5 +1,12 @@
+import { InvalidCredentials } from '@application/errors/application/InvalidCredentials.js';
 import { InvalidRefreshToken } from '@application/errors/application/InvalidRefreshToken.js';
-import { ForgotPasswordCommand, GetTokensFromRefreshTokenCommand, InitiateAuthCommand, SignUpCommand } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  ConfirmForgotPasswordCommand,
+  ForgotPasswordCommand,
+  GetTokensFromRefreshTokenCommand,
+  InitiateAuthCommand,
+  SignUpCommand,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { cognitoClient } from '@infra/clients/cognitoClient.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
@@ -36,26 +43,30 @@ export class AuthGateway {
   }
 
   async signIn({ email, password }: AuthGateway.SignInParams): Promise<AuthGateway.SignInResult> {
-    const command = new InitiateAuthCommand({
-      AuthFlow: 'USER_PASSWORD_AUTH',
-      ClientId: this.appConfig.auth.cognito.client.id,
-      AuthParameters: {
-        USERNAME: email,
-        PASSWORD: password,
-        SECRET_HASH: this.getSecretHash(email),
-      },
-    });
+    try {
+      const command = new InitiateAuthCommand({
+        AuthFlow: 'USER_PASSWORD_AUTH',
+        ClientId: this.appConfig.auth.cognito.client.id,
+        AuthParameters: {
+          USERNAME: email,
+          PASSWORD: password,
+          SECRET_HASH: this.getSecretHash(email),
+        },
+      });
 
-    const { AuthenticationResult } = await cognitoClient.send(command);
+      const { AuthenticationResult } = await cognitoClient.send(command);
 
-    if (!AuthenticationResult?.AccessToken || !AuthenticationResult.RefreshToken) {
-      throw new Error(`Cannot authenticate user: ${email}`);
+      if (!AuthenticationResult?.AccessToken || !AuthenticationResult.RefreshToken) {
+        throw new Error(`Cannot authenticate user: ${email}`);
+      }
+
+      return {
+        accessToken: AuthenticationResult.AccessToken,
+        refreshToken: AuthenticationResult.RefreshToken,
+      };
+    } catch {
+      throw new InvalidCredentials();
     }
-
-    return {
-      accessToken: AuthenticationResult.AccessToken,
-      refreshToken: AuthenticationResult.RefreshToken,
-    };
   }
 
   async refreshToken({
@@ -87,6 +98,22 @@ export class AuthGateway {
     const command = new ForgotPasswordCommand({
       ClientId: this.appConfig.auth.cognito.client.id,
       Username: email,
+      SecretHash: this.getSecretHash(email),
+    });
+
+    await cognitoClient.send(command);
+  }
+
+  async confirmForgotPassword({
+    email,
+    confirmationCode,
+    password,
+  }: AuthGateway.ConfirmForgotPasswordParams): Promise<void> {
+    const command = new ConfirmForgotPasswordCommand({
+      ClientId: this.appConfig.auth.cognito.client.id,
+      ConfirmationCode: confirmationCode,
+      Username: email,
+      Password: password,
       SecretHash: this.getSecretHash(email),
     });
 
@@ -128,5 +155,10 @@ export namespace AuthGateway {
   }
   export type ForgotPasswordParams = {
     email: string;
+  }
+  export type ConfirmForgotPasswordParams = {
+    email: string;
+    confirmationCode: string;
+    password: string;
   }
 }
