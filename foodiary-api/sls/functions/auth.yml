@@ -34,7 +34,7 @@ confirmForgotPassword:
         path: /auth/forgot-password/confirm
 
 preSignUpTrigger:
-  handler: src/main/functions/auth/preSignUpTrigger.handler
+  handler: src/main/functions/auth/cognito/preSignUpTrigger.handler
   events:
     - cognitoUserPool:
         pool: ${self:custom.cognito.PoolName}
@@ -43,7 +43,7 @@ preSignUpTrigger:
         forceDeploy: true
 
 preTokenGenerationTrigger:
-  handler: src/main/functions/auth/preTokenGenerationTrigger.handler
+  handler: src/main/functions/auth/cognito/preTokenGenerationTrigger.handler
   events:
     - cognitoUserPool:
         pool: ${self:custom.cognito.PoolName}
@@ -51,3 +51,12 @@ preTokenGenerationTrigger:
         existing: true
         forceDeploy: true
         lambdaVersion: V2_0
+
+customMessageTrigger:
+  handler: src/main/functions/auth/cognito/customMessageTrigger.handler
+  events:
+    - cognitoUserPool:
+        pool: ${self:custom.cognito.PoolName}
+        trigger: CustomMessage
+        existing: true
+        forceDeploy: true

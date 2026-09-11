@@ -29,16 +29,6 @@ custom:
 
 build:
   esbuild:
-    bundle: true
-    minify: true
-    sourcemap: false
-    external:
-      - "@aws-sdk/*"
-      - "ksuid"
-    exclude:
-      - "@aws-sdk/*"
-    outExtension:
-      ".js": ".mjs"
     configFile: ./esbuild.config.js
 
 functions:
