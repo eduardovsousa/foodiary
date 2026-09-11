@@ -35,6 +35,8 @@ build:
     external:
       - "@aws-sdk/*"
       - "ksuid"
+    exclude:
+      - "@aws-sdk/*"
     outExtension:
       ".js": ".mjs"
     configFile: ./esbuild.config.js
