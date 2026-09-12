@@ -1,6 +1,18 @@
+Conditions:
+  ShouldSetupAPIGWCustomDomain: !And
+    - !Not
+      - !Equals
+        - ${env:API_DOMAIN_NAME, ''}
+        - ""
+    - !Not
+      - !Equals
+        - ${env:ROUTE53_HOSTED_ZONE_ID, ''}
+        - ""
+
 Resources:
   APIGWCustomDomainCertificate:
     Type: AWS::CertificateManager::Certificate
+    Condition: ShouldSetupAPIGWCustomDomain
     Properties:
       DomainName: ${env:API_DOMAIN_NAME}
       ValidationMethod: DNS
@@ -18,3 +30,11 @@ Resources:
         - EndpointType: REGIONAL
           SecurityPolicy: TLS_1_2
           CertificateArn: !Ref APIGWCustomDomainCertificate
+
+  APIGWCustomDomainMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    Condition: ShouldSetupAPIGWCustomDomain
+    Properties:
+      ApiId: !Ref HttpApi
+      DomainName: !Ref APIGWCustomDomain
+      Stage: $default
