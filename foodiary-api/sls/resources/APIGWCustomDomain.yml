@@ -38,3 +38,14 @@ Resources:
       ApiId: !Ref HttpApi
       DomainName: !Ref APIGWCustomDomain
       Stage: $default
+
+  APIGWCustomDomainDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Condition: ShouldSetupAPIGWCustomDomain
+    Properties:
+      HostedZoneId: ${env:ROUTE53_HOSTED_ZONE_ID}
+      Name: !Ref APIGWCustomDomain
+      Type: A
+      AliasTarget:
+        HostedZoneId: !GetAtt APIGWCustomDomain.RegionalHostedZoneId
+        DNSName: !GetAtt APIGWCustomDomain.RegionalDomainName
