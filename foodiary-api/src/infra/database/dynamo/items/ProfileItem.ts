@@ -1,0 +1,73 @@
+import { Profile } from '@application/entities/Profile.js';
+import { AccountItem } from './AccountItem.js';
+
+export class ProfileItem {
+  private readonly type = 'Profile';
+
+  private readonly keys: ProfileItem.Keys;
+
+  constructor(private readonly attrs: ProfileItem.Attributes) {
+    this.keys = {
+      PK: ProfileItem.getPK(this.attrs.accountId),
+      SK: ProfileItem.getSK(this.attrs.accountId),
+    };
+  }
+
+  toItem(): ProfileItem.ItemType {
+    return {
+      ...this.attrs,
+      ...this.keys,
+      type: this.type,
+    };
+  }
+
+  static fromEntity(profile: Profile) {
+    return new ProfileItem({
+      ...profile,
+      birthDate: profile.createdAt.toISOString(),
+      createdAt: profile.createdAt.toISOString(),
+    });
+  }
+
+  static toEntity(profileItem: ProfileItem.ItemType) {
+    return new Profile({
+      accountId: profileItem.accountId,
+      activityLevel: profileItem.activityLevel,
+      birthDate: new Date(profileItem.birthDate),
+      gender: profileItem.gender,
+      height: profileItem.height,
+      name: profileItem.name,
+      weight: profileItem.weight,
+      createdAt: new Date(profileItem.createdAt),
+    });
+  }
+
+  static getPK(profileId: string): ProfileItem.Keys['PK'] {
+    return `ACCOUNT#${profileId}`;
+  }
+  static getSK(profileId: string): ProfileItem.Keys['SK'] {
+    return `ACCOUNT#${profileId}#PROFILE`;
+  }
+}
+
+export namespace ProfileItem {
+  export type Keys = {
+    PK: AccountItem.Keys['PK'];
+    SK: `ACCOUNT#${string}#PROFILE`;
+  }
+
+  export type Attributes = {
+    accountId: string;
+    name: string;
+    birthDate: string;
+    gender: Profile.Gender;
+    height: number;
+    weight: number;
+    activityLevel: Profile.ActivityLevel;
+    createdAt: string;
+  }
+
+  export type ItemType = Keys & Attributes & {
+    type: 'Profile'
+  };
+}
