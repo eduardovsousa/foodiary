@@ -28,6 +28,12 @@ export const signUpSchema = z.object({
         return `Expected one of: ${Object.values(Profile.Gender).join(', ')} but received "${received}"`;
       },
     }),
+    goal: z.enum(Profile.Goal, {
+      error: issue => {
+        const received = issue.input;
+        return `Expected one of: ${Object.values(Profile.Goal).join(', ')} but received "${received}"`;
+      },
+    }),
     height: z.number().check(
       z.minimum(1, '"height" is required'),
       z.positive('"height" must be greater than 0'),
