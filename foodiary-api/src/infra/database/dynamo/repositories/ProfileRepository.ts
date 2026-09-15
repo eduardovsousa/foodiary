@@ -1,5 +1,5 @@
 import { Profile } from '@application/entities/Profile.js';
-import { PutCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, PutCommandInput } from '@aws-sdk/lib-dynamodb';
 import { dynamoClient } from '@infra/clients/dynamoClient.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
@@ -9,14 +9,18 @@ import { ProfileItem } from '../items/ProfileItem.js';
 export class ProfileRepository {
   constructor(private readonly config: AppConfig) { }
 
-  async create(profile: Profile): Promise<void> {
+  getPutCommandInput(profile: Profile): PutCommandInput {
     const profileItem = ProfileItem.fromEntity(profile);
 
-    const command = new PutCommand({
+    return {
       TableName: this.config.db.dynamodb.mainTable,
       Item: profileItem.toItem(),
-    });
+    };
+  }
 
-    await dynamoClient.send(command);
+  async create(profile: Profile): Promise<void> {
+    await dynamoClient.send(
+      new PutCommand(this.getPutCommandInput(profile)),
+    );
   }
 }

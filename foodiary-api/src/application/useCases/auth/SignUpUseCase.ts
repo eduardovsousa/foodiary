@@ -3,18 +3,16 @@ import { Goal } from '@application/entities/Goal.js';
 import { Profile } from '@application/entities/Profile.js';
 import { EmailAlreadyInUse } from '@application/errors/application/EmailAlreadyInUse.js';
 import { AccountRepository } from '@infra/database/dynamo/repositories/AccountRepository.js';
-import { GoalRepository } from '@infra/database/dynamo/repositories/GoalRepository.js';
-import { ProfileRepository } from '@infra/database/dynamo/repositories/ProfileRepository.js';
+import { SignUpUnitOfWork } from '@infra/database/dynamo/uow/SignUpUnitOfWork.js';
 import { AuthGateway } from '@infra/gateways/AuthGateway.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
 
-@Injectable(AuthGateway, AccountRepository, ProfileRepository, GoalRepository)
+@Injectable(AuthGateway, AccountRepository, SignUpUnitOfWork)
 export class SignUpUseCase {
   constructor(
     private readonly authGateway: AuthGateway,
     private readonly accountRepository: AccountRepository,
-    private readonly profileRepository: ProfileRepository,
-    private readonly goalRepository: GoalRepository,
+    private readonly signUpUow: SignUpUnitOfWork,
   ) { }
 
   async execute({
@@ -51,11 +49,11 @@ export class SignUpUseCase {
 
     account.externalId = externalId;
 
-    await Promise.all([
-      await this.accountRepository.create(account),
-      await this.profileRepository.create(profile),
-      await this.goalRepository.create(goal),
-    ]);
+    await this.signUpUow.run({
+      account,
+      goal,
+      profile,
+    });
 
     const { accessToken, refreshToken } = await this.authGateway.signIn({ email, password });
 
