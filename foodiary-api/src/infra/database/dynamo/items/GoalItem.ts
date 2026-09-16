@@ -2,7 +2,7 @@ import { Goal } from '@application/entities/Goal.js';
 import { AccountItem } from './AccountItem.js';
 
 export class GoalItem {
-  private readonly type = 'Goal';
+  static readonly type = 'Goal';
 
   private readonly keys: GoalItem.Keys;
 
@@ -17,7 +17,7 @@ export class GoalItem {
     return {
       ...this.attrs,
       ...this.keys,
-      type: this.type,
+      type: GoalItem.type,
     };
   }
 

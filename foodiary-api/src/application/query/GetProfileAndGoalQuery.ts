@@ -1,7 +1,10 @@
 import { Profile } from '@application/entities/Profile.js';
+import { ResourceNotFound } from '@application/errors/application/ResourceNotFound.js';
 import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { dynamoClient } from '@infra/clients/dynamoClient.js';
 import { AccountItem } from '@infra/database/dynamo/items/AccountItem.js';
+import { GoalItem } from '@infra/database/dynamo/items/GoalItem.js';
+import { ProfileItem } from '@infra/database/dynamo/items/ProfileItem.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 
@@ -39,7 +42,32 @@ export class GetProfileAndGoalQuery {
 
     const { Items = [] } = await dynamoClient.send(command);
 
-    console.log(JSON.stringify({ Items }, null, 2));
+    const profile = Items.find((item): item is GetProfileAndGoalQuery.ProfileItemType => (
+      item.type === ProfileItem.type
+    ));
+    const goal = Items.find((item): item is GetProfileAndGoalQuery.GoalItemType => (
+      item.type === GoalItem.type
+    ));
+
+    if (!profile || !goal) {
+      throw new ResourceNotFound('Account not found.');
+    }
+
+    return {
+      profile: {
+        name: profile.name,
+        birthDate: profile.birthDate,
+        gender: profile.gender,
+        height: profile.height,
+        weight: profile.weight,
+      },
+      goal: {
+        calories: goal.calories,
+        carbohydrates: goal.carbohydrates,
+        fats: goal.fats,
+        proteins: goal.proteins,
+      },
+    };
   }
 };
 
@@ -47,6 +75,21 @@ export namespace GetProfileAndGoalQuery {
   export type Input = {
     accountId: string;
   };
+
+  export type ProfileItemType = {
+    name: string;
+    birthDate: string;
+    gender: Profile.Gender;
+    height: number;
+    weight: number;
+  }
+
+  export type GoalItemType = {
+    calories: number;
+    proteins: number;
+    carbohydrates: number;
+    fats: number;
+  }
 
   export type Output = {
     profile: {

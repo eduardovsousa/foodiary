@@ -1,8 +1,9 @@
 import { Controller } from '@application/contracts/Controller.js';
+import { Profile } from '@application/entities/Profile.js';
 import { GetProfileAndGoalQuery } from '@application/query/GetProfileAndGoalQuery.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
 
-@Injectable( GetProfileAndGoalQuery)
+@Injectable(GetProfileAndGoalQuery)
 export class GetMeController extends Controller<
   'private', GetMeController.Response
 > {
@@ -14,12 +15,16 @@ export class GetMeController extends Controller<
     accountId,
   }: Controller.Request<'private'>):
     Promise<Controller.Response<GetMeController.Response>> {
-    await this.getProfileAndGoalQuery.execute({ accountId });
+    const {
+      goal,
+      profile,
+    } = await this.getProfileAndGoalQuery.execute({ accountId });
 
     return {
       statusCode: 200,
       body: {
-        accountId,
+        goal,
+        profile,
       },
     };
   }
@@ -27,6 +32,18 @@ export class GetMeController extends Controller<
 
 export namespace GetMeController {
   export type Response = {
-    accountId: string;
+    profile: {
+      name: string;
+      birthDate: string;
+      gender: Profile.Gender;
+      height: number;
+      weight: number;
+    };
+    goal: {
+      calories: number;
+      proteins: number;
+      carbohydrates: number;
+      fats: number;
+    };
   }
 }

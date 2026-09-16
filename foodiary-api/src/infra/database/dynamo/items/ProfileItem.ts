@@ -2,7 +2,7 @@ import { Profile } from '@application/entities/Profile.js';
 import { AccountItem } from './AccountItem.js';
 
 export class ProfileItem {
-  private readonly type = 'Profile';
+  static readonly type = 'Profile';
 
   private readonly keys: ProfileItem.Keys;
 
@@ -17,7 +17,7 @@ export class ProfileItem {
     return {
       ...this.attrs,
       ...this.keys,
-      type: this.type,
+      type: ProfileItem.type,
     };
   }
 
