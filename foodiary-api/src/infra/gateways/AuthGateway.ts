@@ -15,7 +15,7 @@ import { createHmac } from 'node:crypto';
 
 @Injectable(AppConfig)
 export class AuthGateway {
-  constructor(private readonly appConfig: AppConfig) { }
+  constructor(private readonly config: AppConfig) { }
 
   async signUp({
     email,
@@ -23,7 +23,7 @@ export class AuthGateway {
     internalId,
   }: AuthGateway.SignUpParams): Promise<AuthGateway.SignUpResult> {
     const command = new SignUpCommand({
-      ClientId: this.appConfig.auth.cognito.client.id,
+      ClientId: this.config.auth.cognito.client.id,
       Username: email,
       Password: password,
       UserAttributes: [
@@ -47,7 +47,7 @@ export class AuthGateway {
     try {
       const command = new InitiateAuthCommand({
         AuthFlow: 'USER_PASSWORD_AUTH',
-        ClientId: this.appConfig.auth.cognito.client.id,
+        ClientId: this.config.auth.cognito.client.id,
         AuthParameters: {
           USERNAME: email,
           PASSWORD: password,
@@ -75,9 +75,9 @@ export class AuthGateway {
   }: AuthGateway.RefreshTokenParams): Promise<AuthGateway.RefreshTokenResult> {
     try {
       const command = new GetTokensFromRefreshTokenCommand({
-        ClientId: this.appConfig.auth.cognito.client.id,
+        ClientId: this.config.auth.cognito.client.id,
         RefreshToken: refreshToken,
-        ClientSecret: this.appConfig.auth.cognito.client.secret,
+        ClientSecret: this.config.auth.cognito.client.secret,
       });
 
       const { AuthenticationResult } = await cognitoClient.send(command);
@@ -97,7 +97,7 @@ export class AuthGateway {
 
   async forgotPassword({ email }: AuthGateway.ForgotPasswordParams): Promise<void> {
     const command = new ForgotPasswordCommand({
-      ClientId: this.appConfig.auth.cognito.client.id,
+      ClientId: this.config.auth.cognito.client.id,
       Username: email,
       SecretHash: this.getSecretHash(email),
     });
@@ -111,7 +111,7 @@ export class AuthGateway {
     password,
   }: AuthGateway.ConfirmForgotPasswordParams): Promise<void> {
     const command = new ConfirmForgotPasswordCommand({
-      ClientId: this.appConfig.auth.cognito.client.id,
+      ClientId: this.config.auth.cognito.client.id,
       ConfirmationCode: confirmationCode,
       Username: email,
       Password: password,
@@ -123,7 +123,7 @@ export class AuthGateway {
 
   async deleteUser({ externalId }: AuthGateway.DeleteUserParams) {
     const command = new AdminDeleteUserCommand({
-      UserPoolId: this.appConfig.auth.cognito.pool.id,
+      UserPoolId: this.config.auth.cognito.pool.id,
       Username: externalId,
     });
 
@@ -131,7 +131,7 @@ export class AuthGateway {
   }
 
   private getSecretHash(email: string): string {
-    const { id, secret } = this.appConfig.auth.cognito.client;
+    const { id, secret } = this.config.auth.cognito.client;
 
     return createHmac('SHA256', secret)
       .update(`${email}${id}`)
