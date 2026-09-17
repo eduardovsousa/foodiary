@@ -1,20 +1,43 @@
 import { Controller } from '@application/contracts/Controller.js';
-import { SignInUseCase } from '@application/useCases/auth/SignInUseCase.js';
+import { Meal } from '@application/entities/Meal.js';
+import { CreateMealUseCase } from '@application/useCases/meals/CreateMealUseCase.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Schema } from '@kernel/decoratos/Schema.js';
+import { CreateMealBody, createMealSchema } from './schemas/createMealSchema.js';
 
-@Injectable(SignInUseCase)
+@Injectable(CreateMealUseCase)
+@Schema(createMealSchema)
 export class CreateMealController extends Controller<
   'private', CreateMealController.Response
 > {
+  constructor(private readonly createMealUseCase: CreateMealUseCase) {
+    super();
+  }
+
   protected override async handle({
     accountId,
-  }: Controller.Request<'private'>):
+    body,
+  }: Controller.Request<'private', CreateMealBody>):
     Promise<Controller.Response<CreateMealController.Response>> {
+    const { file } = body;
+    const inputType = (
+      file.type === 'audio/m4a'
+        ? Meal.InputType.AUDIO
+        : Meal.InputType.PICTURE
+    );
+
+    const { mealId } = await this.createMealUseCase.execute({
+      accountId,
+      file: {
+        size: file.size,
+        inputType,
+      },
+    });
 
     return {
       statusCode: 201,
       body: {
-        accountId,
+        mealId,
       },
     };
   }
@@ -22,6 +45,6 @@ export class CreateMealController extends Controller<
 
 export namespace CreateMealController {
   export type Response = {
-    accountId: string;
+    mealId: string;
   }
 }
