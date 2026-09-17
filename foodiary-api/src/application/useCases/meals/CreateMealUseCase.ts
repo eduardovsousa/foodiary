@@ -1,20 +1,29 @@
 import { Meal } from '@application/entities/Meal.js';
 import { MealRepository } from '@infra/database/dynamo/repositories/MealRepository.js';
+import { MealsFileStorageGateway } from '@infra/gateways/MealsFileStorageGateway.js';
 import { Injectable } from '@kernel/decoratos/Injectable.js';
 
-@Injectable(MealRepository)
+@Injectable(MealRepository, MealsFileStorageGateway)
 export class CreateMealUseCase {
-  constructor(private readonly mealRepository: MealRepository) { }
+  constructor(
+    private readonly mealRepository: MealRepository,
+    private readonly mealsFileStorageGateway: MealsFileStorageGateway,
+  ) { }
 
   async execute({
     accountId,
     file,
   }: CreateMealUseCase.Input): Promise<CreateMealUseCase.Output> {
+    const inputFileKey = MealsFileStorageGateway.generateInputFileKey({
+      accountId,
+      inputType: file.inputType,
+    });
+
     const meal = new Meal({
       accountId,
       inputType: file.inputType,
       status: Meal.Status.UPLOADING,
-      inputFileKey: 'INPUT-FILE-KEY-EXAMPLE',
+      inputFileKey,
     });
 
     await this.mealRepository.create(meal);
