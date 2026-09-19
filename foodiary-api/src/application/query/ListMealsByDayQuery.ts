@@ -18,6 +18,8 @@ export class ListMealsByDayQuery {
       IndexName: 'GSI1',
       ProjectionExpression: '#GSI1PK, #id, #createdAt, #foods, #icon, #name',
       KeyConditionExpression: '#GSI1PK = :GSI1PK',
+      FilterExpression: '#status = :status',
+      ScanIndexForward: false,
       ExpressionAttributeNames: {
         '#GSI1PK': 'GSI1PK',
         '#id': 'id',
@@ -25,19 +27,19 @@ export class ListMealsByDayQuery {
         '#foods': 'foods',
         '#icon': 'icon',
         '#name': 'name',
+        '#status': 'status',
       },
       ExpressionAttributeValues: {
         ':GSI1PK': MealItem.getGSI1PK({
           accountId,
           createdAt: date,
         }),
+        ':status': Meal.Status.SUCCESS,
       },
     });
 
     const { Items = [] } = await dynamoClient.send(command);
     const items = Items as ListMealsByDayQuery.MealItemType[];
-
-    console.log(items);
 
     const meals: ListMealsByDayQuery.Output['meals'] = items.map(item => ({
       id: item.id,
