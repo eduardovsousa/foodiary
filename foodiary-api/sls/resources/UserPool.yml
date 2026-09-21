@@ -32,6 +32,7 @@ Resources:
         From: ${env:COGNITO_EMAILS_FROM}
         ReplyToEmailAddress: ${env:COGNITO_EMAILS_REPLY_TO}
         SourceArn: ${env:SES_ARN}
+
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
