@@ -5,5 +5,5 @@ export interface IFileEventHandler {
 export namespace IFileEventHandler {
   export type Input = {
     fileKey: string;
-  }
+  };
 }

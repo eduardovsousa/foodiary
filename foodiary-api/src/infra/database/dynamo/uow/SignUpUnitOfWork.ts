@@ -1,7 +1,7 @@
 import { Account } from '@application/entities/Account.js';
 import { Goal } from '@application/entities/Goal.js';
 import { Profile } from '@application/entities/Profile.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AccountRepository } from '../repositories/AccountRepository.js';
 import { GoalRepository } from '../repositories/GoalRepository.js';
 import { ProfileRepository } from '../repositories/ProfileRepository.js';

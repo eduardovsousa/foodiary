@@ -1,6 +1,6 @@
 import { ResourceNotFound } from '@application/errors/application/ResourceNotFound.js';
 import { GoalRepository } from '@infra/database/dynamo/repositories/GoalRepository.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 
 @Injectable()
 export class UpdateGoalUseCase {

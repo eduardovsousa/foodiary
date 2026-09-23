@@ -1,4 +1,4 @@
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 
 type CompensationFn = () => Promise<void>;
 

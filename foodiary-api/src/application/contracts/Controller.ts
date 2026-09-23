@@ -1,4 +1,4 @@
-import { getSchema } from '@kernel/decoratos/Schema.js';
+import { getSchema } from '@kernel/decorators/Schema.js';
 import * as z from 'zod/mini';
 
 type TRouteType = 'public' | 'private';

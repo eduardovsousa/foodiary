@@ -1,7 +1,7 @@
 import { Controller } from '@application/contracts/Controller.js';
 import { UpdateProfileUseCase } from '@application/useCases/profiles/UpdateProfileUseCase.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
-import { Schema } from '@kernel/decoratos/Schema.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
+import { Schema } from '@kernel/decorators/Schema.js';
 import { UpdateProfileBody, updateProfileSchema } from './schemas/updateProfileSchema.js';
 
 @Injectable(UpdateProfileUseCase)

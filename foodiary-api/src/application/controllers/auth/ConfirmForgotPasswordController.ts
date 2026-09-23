@@ -1,8 +1,8 @@
 import { Controller } from '@application/contracts/Controller.js';
 import { BadRequest } from '@application/errors/htp/BadRequest.js';
 import { ConfirmForgotPasswordUseCase } from '@application/useCases/auth/ConfirmForgotPasswordUseCase.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
-import { Schema } from '@kernel/decoratos/Schema.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
+import { Schema } from '@kernel/decorators/Schema.js';
 import { ConfirmForgotPasswordBody, confirmForgotPasswordSchema } from './schemas/confirmForgotPasswordSchema.js';
 
 @Injectable(ConfirmForgotPasswordUseCase)

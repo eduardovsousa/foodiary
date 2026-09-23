@@ -1,7 +1,7 @@
 import { Controller } from '@application/contracts/Controller.js';
 import { RefreshTokenUseCase } from '@application/useCases/auth/RefreshTokenUseCase.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
-import { Schema } from '@kernel/decoratos/Schema.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
+import { Schema } from '@kernel/decorators/Schema.js';
 import { RefreshTokenBody, refreshTokenSchema } from './schemas/refreshTokenSchema.js';
 
 @Injectable(RefreshTokenUseCase)

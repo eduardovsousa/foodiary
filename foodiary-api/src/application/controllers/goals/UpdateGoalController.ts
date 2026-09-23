@@ -1,7 +1,7 @@
 import { Controller } from '@application/contracts/Controller.js';
 import { UpdateGoalUseCase } from '@application/useCases/goals/UpdateGoalUseCase.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
-import { Schema } from '@kernel/decoratos/Schema.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
+import { Schema } from '@kernel/decorators/Schema.js';
 import { UpdateGoalBody, updateGoalSchema } from './schemas/updateGoalSchema.js';
 
 @Injectable(UpdateGoalUseCase)

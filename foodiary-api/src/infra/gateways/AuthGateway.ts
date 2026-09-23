@@ -1,15 +1,15 @@
 import { InvalidCredentials } from '@application/errors/application/InvalidCredentials.js';
 import { InvalidRefreshToken } from '@application/errors/application/InvalidRefreshToken.js';
 import {
-  AdminDeleteUserCommand,
-  ConfirmForgotPasswordCommand,
-  ForgotPasswordCommand,
-  GetTokensFromRefreshTokenCommand,
-  InitiateAuthCommand,
-  SignUpCommand,
+    AdminDeleteUserCommand,
+    ConfirmForgotPasswordCommand,
+    ForgotPasswordCommand,
+    GetTokensFromRefreshTokenCommand,
+    InitiateAuthCommand,
+    SignUpCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { cognitoClient } from '@infra/clients/cognitoClient.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 import { createHmac } from 'node:crypto';
 

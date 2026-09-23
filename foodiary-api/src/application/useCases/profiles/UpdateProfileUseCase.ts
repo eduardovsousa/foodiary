@@ -1,7 +1,7 @@
 import { Profile } from '@application/entities/Profile.js';
 import { ResourceNotFound } from '@application/errors/application/ResourceNotFound.js';
 import { ProfileRepository } from '@infra/database/dynamo/repositories/ProfileRepository.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 
 @Injectable()
 export class UpdateProfileUseCase {

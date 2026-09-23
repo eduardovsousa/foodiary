@@ -1,5 +1,5 @@
 import { AuthGateway } from '@infra/gateways/AuthGateway.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 
 @Injectable(AuthGateway)
 export class SignInUseCase {

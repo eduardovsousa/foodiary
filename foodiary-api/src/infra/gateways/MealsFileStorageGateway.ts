@@ -1,36 +1,40 @@
+import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import KSUID from 'ksuid';
 
-import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
-
 import { Meal } from '@application/entities/Meal.js';
-import { s3client } from '@infra/clients/s3client.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { HeadObjectCommand } from '@aws-sdk/client-s3';
+import { s3Client } from '@infra/clients/s3Client.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 import { minutesToSeconds } from '@shared/utils/minutesToSeconds.js';
 
-@Injectable(AppConfig)
+@Injectable()
 export class MealsFileStorageGateway {
-  constructor(private readonly appConfig: AppConfig) { }
+  constructor(private readonly appConfig: AppConfig) {}
 
   static generateInputFileKey({
     accountId,
     inputType,
-  }: MealsFileStorageGateway.GenerateInputFileKey): string {
+  }: MealsFileStorageGateway.GenerateInputFileKeyParams): string {
     const extension = inputType === Meal.InputType.AUDIO ? 'm4a' : 'jpeg';
     const filename = `${KSUID.randomSync().string}.${extension}`;
 
     return `${accountId}/${filename}`;
   }
 
+  getFileURL(fileKey: string) {
+    return `https://${this.appConfig.cdns.mealsCDN}/${fileKey}`;
+  }
+
   async createPOST({
-    mealId,
     file,
+    mealId,
     accountId,
   }: MealsFileStorageGateway.CreatePOSTParams): Promise<MealsFileStorageGateway.CreatePOSTResult> {
     const bucket = this.appConfig.storage.mealsBucket;
     const contentType = file.inputType === Meal.InputType.AUDIO ? 'audio/m4a' : 'image/jpeg';
 
-    const { url, fields } = await createPresignedPost(s3client, {
+    const { url, fields } = await createPresignedPost(s3Client, {
       Bucket: bucket,
       Key: file.key,
       Expires: minutesToSeconds(5),
@@ -58,13 +62,33 @@ export class MealsFileStorageGateway {
 
     return { uploadSignature };
   }
+
+  async getFileMetadata({
+    fileKey,
+  }: MealsFileStorageGateway.GetFileMetadataParams): Promise<MealsFileStorageGateway.GetFileMetadataResult> {
+    const command = new HeadObjectCommand({
+      Bucket: this.appConfig.storage.mealsBucket,
+      Key: fileKey,
+    });
+
+    const { Metadata = {} } = await s3Client.send(command);
+
+    if (!Metadata.accountid || !Metadata.mealid) {
+      throw new Error(`[getFileMetadata] Cannot process file "${fileKey}"`);
+    }
+
+    return {
+      accountId: Metadata.accountid,
+      mealId: Metadata.mealid,
+    };
+  }
 }
 
 export namespace MealsFileStorageGateway {
-  export type GenerateInputFileKey = {
+  export type GenerateInputFileKeyParams = {
     accountId: string;
     inputType: Meal.InputType;
-  }
+  };
 
   export type CreatePOSTParams = {
     mealId: string;
@@ -73,10 +97,19 @@ export namespace MealsFileStorageGateway {
       key: string;
       size: number;
       inputType: Meal.InputType;
-    }
-  }
+    };
+  };
 
   export type CreatePOSTResult = {
     uploadSignature: string;
-  }
+  };
+
+  export type GetFileMetadataParams = {
+    fileKey: string;
+  };
+
+  export type GetFileMetadataResult = {
+    accountId: string;
+    mealId: string;
+  };
 }

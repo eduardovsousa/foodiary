@@ -1,7 +1,7 @@
 import { Account } from '@application/entities/Account.js';
 import { PutCommand, PutCommandInput, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { dynamoClient } from '@infra/clients/dynamoClient.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 import { AccountItem } from '../items/AccountItem.js';
 

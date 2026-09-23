@@ -5,7 +5,7 @@ import { dynamoClient } from '@infra/clients/dynamoClient.js';
 import { AccountItem } from '@infra/database/dynamo/items/AccountItem.js';
 import { GoalItem } from '@infra/database/dynamo/items/GoalItem.js';
 import { ProfileItem } from '@infra/database/dynamo/items/ProfileItem.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 
 @Injectable(AppConfig)

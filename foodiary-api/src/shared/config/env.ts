@@ -12,5 +12,8 @@ export const schema = z.object({
 
   // Bucket
   MEALS_BUCKET: z.string().check(z.minLength(1)),
+
+  // CDN
+  MEALS_CDN_DOMAIN_NAME: z.string().check(z.minLength(1)),
 });
 export const env = schema.parse(process.env);

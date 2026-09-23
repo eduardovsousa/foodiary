@@ -1,7 +1,7 @@
 import { Controller } from '@application/contracts/Controller.js';
 import { Meal } from '@application/entities/Meal.js';
 import { ListMealsByDayQuery } from '@application/query/ListMealsByDayQuery.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 import { listMealsByDaySchema } from './schemas/listMealsByDaySchema.js';
 
 @Injectable(ListMealsByDayQuery)

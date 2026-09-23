@@ -1,8 +1,8 @@
 import { Controller } from '@application/contracts/Controller.js';
 import { Meal } from '@application/entities/Meal.js';
 import { CreateMealUseCase } from '@application/useCases/meals/CreateMealUseCase.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
-import { Schema } from '@kernel/decoratos/Schema.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
+import { Schema } from '@kernel/decorators/Schema.js';
 import { CreateMealBody, createMealSchema } from './schemas/createMealSchema.js';
 
 @Injectable(CreateMealUseCase)

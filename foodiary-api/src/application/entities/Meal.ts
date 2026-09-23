@@ -9,9 +9,9 @@ export class Meal {
 
   attempts: number;
 
-  inputType: Meal.InputType;
+  readonly inputType: Meal.InputType;
 
-  inputFileKey: string;
+  readonly inputFileKey: string;
 
   name: string;
 
@@ -31,6 +31,7 @@ export class Meal {
     this.name = attr.name ?? '';
     this.icon = attr.icon ?? '';
     this.foods = attr.foods ?? [];
+
     this.createdAt = attr.createdAt ?? new Date();
   }
 }
@@ -69,5 +70,5 @@ export namespace Meal {
     proteins: number;
     carbohydrates: number;
     fats: number;
-  }
+  };
 }

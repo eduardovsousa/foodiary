@@ -1,7 +1,7 @@
 import { Controller } from '@application/contracts/Controller.js';
 import { Profile } from '@application/entities/Profile.js';
 import { GetProfileAndGoalQuery } from '@application/query/GetProfileAndGoalQuery.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 
 @Injectable(GetProfileAndGoalQuery)
 export class GetMeController extends Controller<

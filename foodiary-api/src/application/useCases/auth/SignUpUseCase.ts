@@ -6,7 +6,7 @@ import { GoalCalculator } from '@application/services/GoalCalculator.js';
 import { AccountRepository } from '@infra/database/dynamo/repositories/AccountRepository.js';
 import { SignUpUnitOfWork } from '@infra/database/dynamo/uow/SignUpUnitOfWork.js';
 import { AuthGateway } from '@infra/gateways/AuthGateway.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 import { Saga } from '@shared/saga/Saga.js';
 
 @Injectable(AuthGateway, AccountRepository, SignUpUnitOfWork, Saga)

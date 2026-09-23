@@ -2,7 +2,7 @@ import { Meal } from '@application/entities/Meal.js';
 import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { dynamoClient } from '@infra/clients/dynamoClient.js';
 import { MealItem } from '@infra/database/dynamo/items/MealItem.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 
 @Injectable(AppConfig)

@@ -1,27 +1,32 @@
 import { Controller } from '@application/contracts/Controller.js';
 import { Meal } from '@application/entities/Meal.js';
 import { GetMealByIdUseCase } from '@application/useCases/meals/GetMealByIdUseCase.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 
-@Injectable(GetMealByIdUseCase)
-export class GetMealByIdController extends Controller<
-  'private', GetMealByIdController.Response
-> {
+@Injectable()
+export class GetMealByIdController extends Controller<'private', GetMealByIdController.Response> {
   constructor(private readonly getMealByIdUseCase: GetMealByIdUseCase) {
     super();
   }
 
   protected override async handle({
-    accountId, params,
+    accountId,
+    params,
   }: GetMealByIdController.Request): Promise<Controller.Response<GetMealByIdController.Response>> {
     const { mealId } = params;
 
-    const { meal } = await this.getMealByIdUseCase.execute({ accountId, mealId });
+    const { meal } = await this.getMealByIdUseCase.execute({
+      accountId,
+      mealId,
+    });
 
     return {
       statusCode: 200,
       body: {
-        meal,
+        meal: {
+          ...meal,
+          createdAt: meal.createdAt.toISOString(),
+        },
       },
     };
   }
@@ -43,11 +48,11 @@ export namespace GetMealByIdController {
       id: string;
       status: Meal.Status;
       inputType: Meal.InputType;
-      inputFileKey: string;
+      inputFileURL: string;
       name: string;
       icon: string;
       foods: Meal.Food[];
-      createdAt: Date;
-    }
+      createdAt: string;
+    };
   }
 }

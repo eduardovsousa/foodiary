@@ -1,7 +1,7 @@
 import { Controller } from '@application/contracts/Controller.js';
 import { SignInUseCase } from '@application/useCases/auth/SignInUseCase.js';
-import { Injectable } from '@kernel/decoratos/Injectable.js';
-import { Schema } from '@kernel/decoratos/Schema.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
+import { Schema } from '@kernel/decorators/Schema.js';
 import { SignInBody, signInSchema } from './schemas/signInSchema.js';
 
 @Injectable(SignInUseCase)

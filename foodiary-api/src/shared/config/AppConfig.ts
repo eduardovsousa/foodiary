@@ -1,5 +1,4 @@
-
-import { Injectable } from '@kernel/decoratos/Injectable.js';
+import { Injectable } from '@kernel/decorators/Injectable.js';
 import { env } from './env.js';
 
 @Injectable()
@@ -9,6 +8,8 @@ export class AppConfig {
   readonly db: AppConfig.Database;
 
   readonly storage: AppConfig.Storage;
+
+  readonly cdns: AppConfig.CDNs;
 
   constructor() {
     this.auth = {
@@ -32,6 +33,10 @@ export class AppConfig {
     this.storage = {
       mealsBucket: env.MEALS_BUCKET,
     };
+
+    this.cdns = {
+      mealsCDN: env.MEALS_CDN_DOMAIN_NAME,
+    };
   }
 }
 
@@ -45,16 +50,20 @@ export namespace AppConfig {
       pool: {
         id: string;
       };
-    }
+    };
   };
 
   export type Database = {
     dynamodb: {
       mainTable: string;
-    }
+    };
   };
 
   export type Storage = {
     mealsBucket: string;
+  };
+
+  export type CDNs = {
+    mealsCDN: string;
   };
 }
