@@ -6,6 +6,7 @@ createMeal:
         path: /meals
         authorizer:
           name: CognitoAuthorizer
+
 listMealsByDay:
   handler: src/main/functions/meals/listMealsByDay.handler
   events:
@@ -14,6 +15,7 @@ listMealsByDay:
         path: /meals
         authorizer:
           name: CognitoAuthorizer
+
 getMealById:
   handler: src/main/functions/meals/getMealById.handler
   events:
@@ -22,3 +24,12 @@ getMealById:
         path: /meals/{mealId}
         authorizer:
           name: CognitoAuthorizer
+
+onMealFileUploaded:
+  handler: src/main/functions/meals/onMealFileUploaded.handler
+  events:
+    - s3:
+        bucket: !Ref MealsBucket
+        event: s3:ObjectCreated:*
+        existing: true
+        forceDeploy: true

@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import 'dotenv/config';
+
 import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -6,8 +8,16 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const API_URL = 'https://api.com.br/meals';
-const TOKEN = 'token';
+const API_URL = `${process.env.SCRIPT_API_URL}/meals`;
+const TOKEN = process.env.SCRIPT_TOKEN;
+
+if (!API_URL) {
+  throw new Error('SCRIPT_API_URL is not configured');
+}
+
+if (!TOKEN) {
+  throw new Error('SCRIPT_TOKEN is not configured');
+}
 
 interface IPresignResponse {
   uploadSignature: string;
