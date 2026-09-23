@@ -11,6 +11,8 @@ export class AppConfig {
 
   readonly cdns: AppConfig.CDNs;
 
+  readonly queues: AppConfig.Queues;
+
   constructor() {
     this.auth = {
       cognito: {
@@ -36,6 +38,10 @@ export class AppConfig {
 
     this.cdns = {
       mealsCDN: env.MEALS_CDN_DOMAIN_NAME,
+    };
+
+    this.queues = {
+      mealsQueueUrl: env.MEALS_QUEUE_URL,
     };
   }
 }
@@ -65,5 +71,9 @@ export namespace AppConfig {
 
   export type CDNs = {
     mealsCDN: string;
+  };
+
+  export type Queues = {
+    mealsQueueUrl: string;
   };
 }

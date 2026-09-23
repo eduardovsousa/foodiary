@@ -15,5 +15,8 @@ export const schema = z.object({
 
   // CDN
   MEALS_CDN_DOMAIN_NAME: z.string().check(z.minLength(1)),
+
+  // QUEUE
+  MEALS_QUEUE_URL: z.string().check(z.minLength(1)),
 });
 export const env = schema.parse(process.env);
