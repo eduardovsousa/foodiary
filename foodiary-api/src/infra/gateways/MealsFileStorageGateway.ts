@@ -25,6 +25,7 @@ export class MealsFileStorageGateway {
   async createPOST({
     mealId,
     file,
+    accountId,
   }: MealsFileStorageGateway.CreatePOSTParams): Promise<MealsFileStorageGateway.CreatePOSTResult> {
     const bucket = this.appConfig.storage.mealsBucket;
     const contentType = file.inputType === Meal.InputType.AUDIO ? 'audio/m4a' : 'image/jpeg';
@@ -41,6 +42,7 @@ export class MealsFileStorageGateway {
       ],
       Fields: {
         'x-amz-meta-mealid': mealId,
+        'x-amz-meta-accountid': accountId,
       },
     });
 
@@ -66,6 +68,7 @@ export namespace MealsFileStorageGateway {
 
   export type CreatePOSTParams = {
     mealId: string;
+    accountId: string;
     file: {
       key: string;
       size: number;
