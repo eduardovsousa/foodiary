@@ -3,7 +3,7 @@ import { sqsClient } from '@infra/clients/sqsClient.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 
-@Injectable(AppConfig)
+@Injectable()
 export class MealsQueueGateway {
   constructor(private readonly appConfig: AppConfig) { }
 

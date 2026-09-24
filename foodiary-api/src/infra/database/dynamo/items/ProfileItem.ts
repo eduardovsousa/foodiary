@@ -24,7 +24,7 @@ export class ProfileItem {
   static fromEntity(profile: Profile) {
     return new ProfileItem({
       ...profile,
-      birthDate: profile.createdAt.toISOString(),
+      birthDate: profile.birthDate.toISOString(),
       createdAt: profile.createdAt.toISOString(),
     });
   }

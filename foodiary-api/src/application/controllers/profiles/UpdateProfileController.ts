@@ -4,7 +4,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { Schema } from '@kernel/decorators/Schema.js';
 import { UpdateProfileBody, updateProfileSchema } from './schemas/updateProfileSchema.js';
 
-@Injectable(UpdateProfileUseCase)
+@Injectable()
 @Schema(updateProfileSchema)
 export class UpdateProfileController extends Controller<
   'private', UpdateProfileController.Response

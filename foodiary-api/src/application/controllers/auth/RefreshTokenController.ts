@@ -4,7 +4,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { Schema } from '@kernel/decorators/Schema.js';
 import { RefreshTokenBody, refreshTokenSchema } from './schemas/refreshTokenSchema.js';
 
-@Injectable(RefreshTokenUseCase)
+@Injectable()
 @Schema(refreshTokenSchema)
 export class RefreshTokenController extends Controller<
   'public', RefreshTokenController.Response,

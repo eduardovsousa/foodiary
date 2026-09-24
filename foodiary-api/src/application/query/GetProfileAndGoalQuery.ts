@@ -8,7 +8,7 @@ import { ProfileItem } from '@infra/database/dynamo/items/ProfileItem.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 
-@Injectable(AppConfig)
+@Injectable()
 export class GetProfileAndGoalQuery {
   constructor(private readonly config: AppConfig) { }
 

@@ -5,7 +5,7 @@ import { MealItem } from '@infra/database/dynamo/items/MealItem.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 
-@Injectable(AppConfig)
+@Injectable()
 export class ListMealsByDayQuery {
   constructor(private readonly appConfig: AppConfig) { }
 

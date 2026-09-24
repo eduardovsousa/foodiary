@@ -5,7 +5,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { Schema } from '@kernel/decorators/Schema.js';
 import { CreateMealBody, createMealSchema } from './schemas/createMealSchema.js';
 
-@Injectable(CreateMealUseCase)
+@Injectable()
 @Schema(createMealSchema)
 export class CreateMealController extends Controller<
   'private', CreateMealController.Response

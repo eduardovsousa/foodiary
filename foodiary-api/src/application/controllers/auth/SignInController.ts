@@ -4,7 +4,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { Schema } from '@kernel/decorators/Schema.js';
 import { SignInBody, signInSchema } from './schemas/signInSchema.js';
 
-@Injectable(SignInUseCase)
+@Injectable()
 @Schema(signInSchema)
 export class SignInController extends Controller<
   'public', SignInController.Response,

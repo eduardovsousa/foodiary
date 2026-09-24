@@ -9,7 +9,7 @@ import { AuthGateway } from '@infra/gateways/AuthGateway.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 import { Saga } from '@shared/saga/Saga.js';
 
-@Injectable(AuthGateway, AccountRepository, SignUpUnitOfWork, Saga)
+@Injectable()
 export class SignUpUseCase {
   constructor(
     private readonly authGateway: AuthGateway,

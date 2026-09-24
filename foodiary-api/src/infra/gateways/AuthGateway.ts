@@ -13,7 +13,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 import { createHmac } from 'node:crypto';
 
-@Injectable(AppConfig)
+@Injectable()
 export class AuthGateway {
   constructor(private readonly config: AppConfig) { }
 

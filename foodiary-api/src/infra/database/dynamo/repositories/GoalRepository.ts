@@ -5,7 +5,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 import { GoalItem } from '../items/GoalItem.js';
 
-@Injectable(AppConfig)
+@Injectable()
 export class GoalRepository {
   constructor(private readonly config: AppConfig) { }
 

@@ -5,7 +5,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { Schema } from '@kernel/decorators/Schema.js';
 import { ForgotPasswordBody, forgotPasswordSchema } from './schemas/forgotPasswordSchema.js';
 
-@Injectable(ForgotPasswordUseCase)
+@Injectable()
 @Schema(forgotPasswordSchema)
 export class ForgotPasswordController extends Controller<
   'public', ForgotPasswordController.Response,

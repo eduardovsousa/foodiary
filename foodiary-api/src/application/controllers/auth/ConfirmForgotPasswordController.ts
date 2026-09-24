@@ -5,7 +5,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { Schema } from '@kernel/decorators/Schema.js';
 import { ConfirmForgotPasswordBody, confirmForgotPasswordSchema } from './schemas/confirmForgotPasswordSchema.js';
 
-@Injectable(ConfirmForgotPasswordUseCase)
+@Injectable()
 @Schema(confirmForgotPasswordSchema)
 export class ConfirmForgotPasswordController extends Controller<
   'public', ConfirmForgotPasswordController.Response,

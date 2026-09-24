@@ -3,7 +3,7 @@ import { MealRepository } from '@infra/database/dynamo/repositories/MealReposito
 import { MealsFileStorageGateway } from '@infra/gateways/MealsFileStorageGateway.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 
-@Injectable(MealRepository, MealsFileStorageGateway)
+@Injectable()
 export class CreateMealUseCase {
   constructor(
     private readonly mealRepository: MealRepository,

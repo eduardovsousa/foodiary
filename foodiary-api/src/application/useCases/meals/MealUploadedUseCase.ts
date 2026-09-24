@@ -5,7 +5,7 @@ import { MealsFileStorageGateway } from '@infra/gateways/MealsFileStorageGateway
 import { MealsQueueGateway } from '@infra/gateways/MealsQueueGateway.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 
-@Injectable(MealsFileStorageGateway, MealRepository, MealsQueueGateway)
+@Injectable()
 export class MealUploadedUseCase {
   constructor(
     private readonly mealsFileStorageGateway: MealsFileStorageGateway,

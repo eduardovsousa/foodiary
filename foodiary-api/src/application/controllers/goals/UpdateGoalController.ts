@@ -4,7 +4,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { Schema } from '@kernel/decorators/Schema.js';
 import { UpdateGoalBody, updateGoalSchema } from './schemas/updateGoalSchema.js';
 
-@Injectable(UpdateGoalUseCase)
+@Injectable()
 @Schema(updateGoalSchema)
 export class UpdateGoalController extends Controller<
   'private', UpdateGoalController.Response

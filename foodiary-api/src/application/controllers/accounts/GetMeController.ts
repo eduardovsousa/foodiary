@@ -3,7 +3,7 @@ import { Profile } from '@application/entities/Profile.js';
 import { GetProfileAndGoalQuery } from '@application/query/GetProfileAndGoalQuery.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 
-@Injectable(GetProfileAndGoalQuery)
+@Injectable()
 export class GetMeController extends Controller<
   'private', GetMeController.Response
 > {

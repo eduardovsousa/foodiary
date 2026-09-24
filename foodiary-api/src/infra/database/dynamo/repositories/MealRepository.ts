@@ -5,7 +5,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 import { MealItem } from '../items/MealItem.js';
 
-@Injectable(AppConfig)
+@Injectable()
 export class MealRepository {
   constructor(private readonly config: AppConfig) { }
 

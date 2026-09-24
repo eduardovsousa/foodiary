@@ -5,7 +5,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { AppConfig } from '@shared/config/AppConfig.js';
 import { ProfileItem } from '../items/ProfileItem.js';
 
-@Injectable(AppConfig)
+@Injectable()
 export class ProfileRepository {
   constructor(private readonly config: AppConfig) { }
 

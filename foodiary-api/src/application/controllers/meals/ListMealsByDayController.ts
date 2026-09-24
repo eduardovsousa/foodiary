@@ -4,7 +4,7 @@ import { ListMealsByDayQuery } from '@application/query/ListMealsByDayQuery.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 import { listMealsByDaySchema } from './schemas/listMealsByDaySchema.js';
 
-@Injectable(ListMealsByDayQuery)
+@Injectable()
 export class ListMealsByDayController extends Controller<
   'private', ListMealsByDayController.Response
 > {

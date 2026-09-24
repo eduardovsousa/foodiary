@@ -7,7 +7,7 @@ import { GoalRepository } from '../repositories/GoalRepository.js';
 import { ProfileRepository } from '../repositories/ProfileRepository.js';
 import { UnitOfWork } from './UnitOfWork.js';
 
-@Injectable(AccountRepository, ProfileRepository, GoalRepository)
+@Injectable()
 export class SignUpUnitOfWork extends UnitOfWork {
   constructor(
     private readonly accountRepository: AccountRepository,

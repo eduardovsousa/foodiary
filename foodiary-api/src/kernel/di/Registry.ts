@@ -15,18 +15,16 @@ export class Registry {
 
   private readonly providers = new Map<string, Registry.Provider>();
 
-  register(impl: Constructor, deps: Constructor[] = []) {
+  register(impl: Constructor) {
     const token = impl.name;
 
     if (this.providers.has(token)) {
-      throw new Error(`${token} is already registered in the registry.`);
+      throw new Error(`"${token}" is already registered in the registry.`);
     }
 
-    const resolvedDeps = deps.length > 0
-      ? deps
-      : (Reflect.getMetadata('design:paramtypes', impl) ?? []);
+    const deps = Reflect.getMetadata('design:paramtypes', impl) ?? [];
 
-    this.providers.set(token, { impl, deps: resolvedDeps });
+    this.providers.set(token, { impl, deps });
   }
 
   resolve<TImpl extends Constructor>(impl: TImpl): InstanceType<TImpl> {
@@ -34,7 +32,7 @@ export class Registry {
     const provider = this.providers.get(token);
 
     if (!provider) {
-      throw new Error(`${token} is not registered.`);
+      throw new Error(`"${token}" is not registered.`);
     }
 
     const deps = provider.deps.map(dep => this.resolve(dep));
@@ -48,5 +46,5 @@ export namespace Registry {
   export type Provider = {
     impl: Constructor;
     deps: Constructor[];
-  }
+  };
 }

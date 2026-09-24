@@ -1,7 +1,7 @@
 import { AuthGateway } from '@infra/gateways/AuthGateway.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 
-@Injectable(AuthGateway)
+@Injectable()
 export class SignInUseCase {
   constructor(
     private readonly authGateway: AuthGateway,
