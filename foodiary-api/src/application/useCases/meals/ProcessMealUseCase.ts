@@ -1,59 +1,73 @@
 import { Meal } from '@application/entities/Meal.js';
 import { ResourceNotFound } from '@application/errors/application/ResourceNotFound.js';
 import { MealRepository } from '@infra/database/dynamo/repositories/MealRepository.js';
-import { MealsFileStorageGateway } from '@infra/gateways/MealsFileStorageGateway.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 
+const MAX_ATTEMPTS = 2;
 @Injectable()
-export class GetMealByIdUseCase {
-  constructor(
-    private readonly mealRepository: MealRepository,
-    private readonly mealsFileStorageGateway: MealsFileStorageGateway,
-  ) {}
+export class ProcessMealUseCase {
+  constructor(private readonly mealRepository: MealRepository) { }
 
   async execute({
     accountId,
     mealId,
-  }: GetMealByIdUseCase.Input): Promise<GetMealByIdUseCase.Output> {
+  }: ProcessMealUseCase.Input): Promise<ProcessMealUseCase.Output> {
     const meal = await this.mealRepository.findById({ accountId, mealId });
 
     if (!meal) {
-      throw new ResourceNotFound('Meal not found.');
+      throw new ResourceNotFound(`Meal "${mealId}" not found.`);
     }
 
-    const inputFileURL = this.mealsFileStorageGateway.getFileURL(meal.inputFileKey);
+    if (meal.status === Meal.Status.UPLOADING) {
+      throw new Error(`Meal "${mealId}" is still uploading.`);
+    }
 
-    return {
-      meal: {
-        createdAt: meal.createdAt,
-        foods: meal.foods,
-        icon: meal.icon,
-        id: meal.id,
-        inputFileURL,
-        inputType: meal.inputType,
-        name: meal.name,
-        status: meal.status,
-      },
-    };
+    if (meal.status === Meal.Status.PROCESSING) {
+      throw new Error(`Meal "${mealId}" is already being processed.`);
+    }
+
+    if (meal.status === Meal.Status.SUCCESS) {
+      return;
+    }
+
+    try {
+      meal.status = Meal.Status.PROCESSING;
+      meal.attempts += 1;
+      await this.mealRepository.save(meal);
+
+      // process with ia
+      meal.status = Meal.Status.SUCCESS;
+      meal.name = 'Café da tarde';
+      meal.icon = '🥐';
+      meal.foods = [
+        {
+          calories: 100,
+          carbohydrates: 200,
+          fats: 300,
+          name: 'Pãozinho',
+          proteins: 20,
+          quantity: '2 unidade',
+        },
+      ];
+
+      await this.mealRepository.save(meal);
+    } catch (error) {
+      meal.status = meal.attempts >= MAX_ATTEMPTS
+        ? Meal.Status.FAILED
+        : Meal.Status.QUEUED;
+
+      await this.mealRepository.save(meal);
+
+      throw error;
+    }
   }
 }
 
-export namespace GetMealByIdUseCase {
+export namespace ProcessMealUseCase {
   export type Input = {
     accountId: string;
     mealId: string;
   };
 
-  export type Output = {
-    meal: {
-      id: string;
-      status: Meal.Status;
-      inputType: Meal.InputType;
-      inputFileURL: string;
-      name: string;
-      icon: string;
-      foods: Meal.Food[];
-      createdAt: Date;
-    };
-  };
+  export type Output = void;
 }
