@@ -8,6 +8,7 @@ provider:
   architecture: arm64
   memorySize: 128
   stage: ${opt:stage, 'dev'}
+  logRetentionInDays: 7
   environment: ${file(./sls/config/env.yml)}
   iam:
     role: ${file(./sls/config/role.yml)}
