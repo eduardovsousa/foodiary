@@ -2,8 +2,10 @@ import { Controller } from '@application/contracts/Controller.js';
 import { ApplicationError } from '@application/errors/application/ApplicationError.js';
 import { ErrorCode } from '@application/errors/ErrorCode.js';
 import { HttpError } from '@application/errors/htp/HttpError.js';
+import { Registry } from '@kernel/di/Registry.js';
 import { lambdaBodyParser } from '@main/utils/lambdaBodyParser.js';
 import { lambdaErrorResponse } from '@main/utils/lambdaErrorResponse.js';
+import { Constructor } from '@shared/types/Constructor.js';
 import {
   APIGatewayProxyEventV2,
   APIGatewayProxyEventV2WithJWTAuthorizer,
@@ -13,13 +15,11 @@ import * as z from 'zod/v4/core';
 
 type Event = APIGatewayProxyEventV2 | APIGatewayProxyEventV2WithJWTAuthorizer;
 
-export function lambdaHttpAdapter(
-  controller: Controller<any, unknown>,
-) {
-  return async (
-    event: Event,
-  ): Promise<APIGatewayProxyResultV2> => {
+export function lambdaHttpAdapter(controllerImpl: Constructor<Controller<any, unknown>>) {
+  return async (event: Event): Promise<APIGatewayProxyResultV2> => {
     try {
+      const controller = Registry.getInstance().resolve(controllerImpl);
+
       const body = lambdaBodyParser(event.body);
       const params = event.pathParameters ?? {};
       const queryParams = event.queryStringParameters ?? {};

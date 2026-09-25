@@ -1,4 +1,3 @@
-
 import { IQueueConsumer } from '@application/contracts/IQueueConsumer.js';
 import { Registry } from '@kernel/di/Registry.js';
 import { Constructor } from '@shared/types/Constructor.js';
