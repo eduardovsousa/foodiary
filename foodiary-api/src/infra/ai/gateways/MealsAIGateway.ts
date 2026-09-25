@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import OpenAI, { toFile } from 'openai';
 import { zodTextFormat } from 'openai/helpers/zod';
+import type { ResponseInputContent } from 'openai/resources/responses/responses';
 
 import { Meal } from '@application/entities/Meal.js';
 import { MealsFileStorageGateway } from '@infra/gateways/MealsFileStorageGateway.js';
@@ -29,103 +30,96 @@ export class MealsAIGateway {
 
   private readonly client = new OpenAI();
 
-  async processMeal(meal: Meal): Promise<MealsAIGateway.ProcessMealResult> {
-    const mealFileUrl = this.mealsFileStorageGateway.getFileURL(meal.inputFileKey);
+  async processMeal(
+    meal: Meal,
+  ): Promise<MealsAIGateway.ProcessMealResult> {
+    const mealFileUrl =
+      this.mealsFileStorageGateway.getFileURL(meal.inputFileKey);
+
     if (meal.inputType === Meal.InputType.PICTURE) {
-      const response = await this.client.responses.parse({
-        model: 'gpt-6-luna',
-
-        reasoning: {
-          effort: 'low',
-        },
-
-        input: [
+      return this.callAI({
+        mealId: meal.id,
+        systemPrompt: getImagePrompt(),
+        userMessagesParts: [
           {
-            role: 'system',
-            content: getImagePrompt(),
+            type: 'input_image',
+            image_url: mealFileUrl,
+            detail: 'high',
           },
           {
-            role: 'user',
-            content: [
-              {
-                type: 'input_image',
-                image_url: mealFileUrl,
-                detail: 'high',
-              },
-              {
-                type: 'input_text',
-                text: `Meal date: ${meal.createdAt}`,
-              },
-            ],
+            type: 'input_text',
+            text: `Meal date: ${meal.createdAt}`,
           },
         ],
-
-        text: {
-          format: zodTextFormat(mealSchema, 'meal'),
-        },
       });
-      const mealDetails = response.output_parsed;
-
-      if (!mealDetails) {
-        console.error('OpenAi response:', JSON.stringify(response, null, 2));
-        throw new Error(`Failed to processing meal "${meal.id}"`);
-      }
-      const { success, data, error } = mealSchema.safeParse(mealDetails);
-
-      if (!success) {
-        console.log('Zod error:', error);
-        console.error('OpenAi response:', JSON.stringify(response, null, 2));
-        throw new Error(`Failed to processing meal "${meal.id}"`);
-      }
-
-      return data;
     }
 
-    const audioFile = await downloadFileFromUrl(mealFileUrl);
+    const transcription = await this.transcribe(mealFileUrl);
 
-    // audio
-    const { text } = await this.client.audio.transcriptions.create({
-      model: 'gpt-4o-mini-transcribe',
-      file: await toFile(audioFile, 'audio.m4a', { type: 'audio/m4a' }),
+    return this.callAI({
+      mealId: meal.id,
+      systemPrompt: getTextPrompt(),
+      userMessagesParts:
+        `Meal date: ${meal.createdAt}\n\nMeal: ${transcription}`,
     });
+  }
 
+  private async callAI({
+    mealId,
+    systemPrompt,
+    userMessagesParts,
+  }: MealsAIGateway.CallAIParams): Promise<MealsAIGateway.ProcessMealResult> {
     const response = await this.client.responses.parse({
       model: 'gpt-6-luna',
-
       reasoning: {
         effort: 'low',
       },
-
       input: [
         {
           role: 'system',
-          content: getTextPrompt(),
+          content: systemPrompt,
         },
         {
           role: 'user',
-          content: `Meal date: ${meal.createdAt}\n\nMeal: ${text}`,
+          content: userMessagesParts,
         },
       ],
-
       text: {
         format: zodTextFormat(mealSchema, 'meal'),
       },
     });
+
     const mealDetails = response.output_parsed;
 
     if (!mealDetails) {
       console.error('OpenAi response:', JSON.stringify(response, null, 2));
-      throw new Error(`Failed to processing meal "${meal.id}"`);
+
+      throw new Error(`Failed to processing meal "${mealId}"`);
     }
+
     const { success, data, error } = mealSchema.safeParse(mealDetails);
 
     if (!success) {
-      console.log('Zod error:', error);
+      console.log('Zod error:', JSON.stringify(error.issues));
       console.error('OpenAi response:', JSON.stringify(response, null, 2));
-      throw new Error(`Failed to processing meal "${meal.id}"`);
+
+      throw new Error(`Failed to processing meal "${mealId}"`);
     }
 
     return data;
+  }
+
+  private async transcribe(audioFileUrl: string) {
+    const audioFile = await downloadFileFromUrl(audioFileUrl);
+
+    const { text } = await this.client.audio.transcriptions.create({
+      model: 'gpt-4o-mini-transcribe',
+      file: await toFile(audioFile, 'audio.m4a', {
+        type: 'audio/m4a',
+      }),
+    });
+
+    return text;
   }
 }
 
@@ -134,5 +128,11 @@ export namespace MealsAIGateway {
     name: string;
     icon: string;
     foods: Meal.Food[];
-  }
+  };
+
+  export type CallAIParams = {
+    mealId: string;
+    systemPrompt: string;
+    userMessagesParts: string | ResponseInputContent[];
+  };
 }
