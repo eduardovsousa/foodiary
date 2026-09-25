@@ -8,6 +8,7 @@ import { Injectable } from '@kernel/decorators/Injectable.js';
 import { downloadFileFromUrl } from '@shared/utils/downloadFileFromUrl.js';
 import { z } from 'zod/mini';
 import { getImagePrompt } from '../prompts/getImagePrompt.js';
+import { getTextPrompt } from '../prompts/getTextPrompt.js';
 
 const mealSchema = z.object({
   name: z.string(),
@@ -88,13 +89,43 @@ export class MealsAIGateway {
       file: await toFile(audioFile, 'audio.m4a', { type: 'audio/m4a' }),
     });
 
-    console.log(JSON.stringify(text, null, 2));
+    const response = await this.client.responses.parse({
+      model: 'gpt-6-luna',
 
-    return {
-      name: '',
-      icon: '',
-      foods: [],
-    };
+      reasoning: {
+        effort: 'low',
+      },
+
+      input: [
+        {
+          role: 'system',
+          content: getTextPrompt(),
+        },
+        {
+          role: 'user',
+          content: `Meal date: ${meal.createdAt}\n\nMeal: ${text}`,
+        },
+      ],
+
+      text: {
+        format: zodTextFormat(mealSchema, 'meal'),
+      },
+    });
+    const mealDetails = response.output_parsed;
+
+    if (!mealDetails) {
+      console.error('OpenAi response:', JSON.stringify(response, null, 2));
+      throw new Error(`Failed to processing meal "${meal.id}"`);
+    }
+    const { success, data, error } = mealSchema.safeParse(mealDetails);
+
+    if (!success) {
+      console.log('Zod error:', error);
+      console.error('OpenAi response:', JSON.stringify(response, null, 2));
+      throw new Error(`Failed to processing meal "${meal.id}"`);
+    }
+
+    return data;
   }
 }
 
