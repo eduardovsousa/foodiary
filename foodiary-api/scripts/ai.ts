@@ -1,14 +1,11 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: 'https://openrouter.ai/api/v1',
-});
+const client = new OpenAI();
 
 async function main() {
   const response = await client.chat.completions.create({
-    model: 'nex-n2.5-mini:free',
+    model: 'gpt-6-luna',
     messages: [
       {
         role: 'system',
