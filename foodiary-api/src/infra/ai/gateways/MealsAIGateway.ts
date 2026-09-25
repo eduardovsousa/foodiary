@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
-import OpenAI from 'openai';
+import OpenAI, { toFile } from 'openai';
 import { zodTextFormat } from 'openai/helpers/zod';
 
 import { Meal } from '@application/entities/Meal.js';
 import { MealsFileStorageGateway } from '@infra/gateways/MealsFileStorageGateway.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
+import { downloadFileFromUrl } from '@shared/utils/downloadFileFromUrl.js';
 import { z } from 'zod/mini';
 import { getImagePrompt } from '../prompts/getImagePrompt.js';
 
@@ -28,9 +29,8 @@ export class MealsAIGateway {
   private readonly client = new OpenAI();
 
   async processMeal(meal: Meal): Promise<MealsAIGateway.ProcessMealResult> {
+    const mealFileUrl = this.mealsFileStorageGateway.getFileURL(meal.inputFileKey);
     if (meal.inputType === Meal.InputType.PICTURE) {
-      const imageUrl = this.mealsFileStorageGateway.getFileURL(meal.inputFileKey);
-
       const response = await this.client.responses.parse({
         model: 'gpt-6-luna',
 
@@ -48,7 +48,7 @@ export class MealsAIGateway {
             content: [
               {
                 type: 'input_image',
-                image_url: imageUrl,
+                image_url: mealFileUrl,
                 detail: 'high',
               },
               {
@@ -79,6 +79,16 @@ export class MealsAIGateway {
 
       return data;
     }
+
+    const audioFile = await downloadFileFromUrl(mealFileUrl);
+
+    // audio
+    const { text } = await this.client.audio.transcriptions.create({
+      model: 'gpt-4o-mini-transcribe',
+      file: await toFile(audioFile, 'audio.m4a', { type: 'audio/m4a' }),
+    });
+
+    console.log(JSON.stringify(text, null, 2));
 
     return {
       name: '',

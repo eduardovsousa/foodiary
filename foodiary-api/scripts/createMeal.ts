@@ -122,6 +122,6 @@ async function uploadFile(filePath: string, fileType: 'audio/m4a' | 'image/jpeg'
 }
 
 uploadFile(
-  path.resolve(__dirname, 'assets', 'refeicao.jpg'),
-  'image/jpeg',
+  path.resolve(__dirname, 'assets', 'audio.m4a'),
+  'audio/m4a',
 ).catch(() => process.exit(1));
