@@ -1,6 +1,6 @@
 import { Meal } from '@application/entities/Meal.js';
 import { ResourceNotFound } from '@application/errors/application/ResourceNotFound.js';
-import { MealsAIGateway } from '@infra/ai/MealsAIGateway.js';
+import { MealsAIGateway } from '@infra/ai/gateways/MealsAIGateway.js';
 import { MealRepository } from '@infra/database/dynamo/repositories/MealRepository.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 
@@ -39,13 +39,8 @@ export class ProcessMealUseCase {
       meal.attempts += 1;
       await this.mealRepository.save(meal);
 
-      const {
-        name,
-        icon,
-        foods,
-      } = await this.mealsAIGateway.processMeal(meal);
+      const { name, icon, foods } = await this.mealsAIGateway.processMeal(meal);
 
-      // process with ia
       meal.status = Meal.Status.SUCCESS;
       meal.name = name;
       meal.icon = icon;
