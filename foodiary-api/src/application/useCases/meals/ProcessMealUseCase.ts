@@ -1,12 +1,16 @@
 import { Meal } from '@application/entities/Meal.js';
 import { ResourceNotFound } from '@application/errors/application/ResourceNotFound.js';
+import { MealsAIGateway } from '@infra/ai/MealsAIGateway.js';
 import { MealRepository } from '@infra/database/dynamo/repositories/MealRepository.js';
 import { Injectable } from '@kernel/decorators/Injectable.js';
 
 const MAX_ATTEMPTS = 2;
 @Injectable()
 export class ProcessMealUseCase {
-  constructor(private readonly mealRepository: MealRepository) { }
+  constructor(
+    private readonly mealRepository: MealRepository,
+    private readonly mealsAIGateway: MealsAIGateway,
+  ) { }
 
   async execute({
     accountId,
@@ -35,20 +39,17 @@ export class ProcessMealUseCase {
       meal.attempts += 1;
       await this.mealRepository.save(meal);
 
+      const {
+        name,
+        icon,
+        foods,
+      } = await this.mealsAIGateway.processMeal(meal);
+
       // process with ia
       meal.status = Meal.Status.SUCCESS;
-      meal.name = 'Café da tarde';
-      meal.icon = '🥐';
-      meal.foods = [
-        {
-          calories: 100,
-          carbohydrates: 200,
-          fats: 300,
-          name: 'Pãozinho',
-          proteins: 20,
-          quantity: '2 unidade',
-        },
-      ];
+      meal.name = name;
+      meal.icon = icon;
+      meal.foods = foods;
 
       await this.mealRepository.save(meal);
     } catch (error) {
