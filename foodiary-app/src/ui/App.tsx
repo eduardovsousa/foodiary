@@ -4,10 +4,9 @@ import {
   HostGrotesk_600SemiBold,
   useFonts,
 } from '@expo-google-fonts/host-grotesk';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 
-import { theme } from './theme';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Greetings } from './screens/Greetings';
 
 export function App() {
   const [isFontsLoaded] = useFonts({
@@ -21,23 +20,8 @@ export function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          fontFamily: theme.fontFamily.sans.semiBold,
-          fontSize: theme.fontSize.base,
-        }}
-      >Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <Greetings />
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.lime[500],
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
