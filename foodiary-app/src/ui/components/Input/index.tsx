@@ -12,6 +12,7 @@ export interface IInputProps extends BaseTextInputProps {
   disabled?: boolean;
   InputComponent?: React.ComponentType<TextInputProps>;
   ref?: React.Ref<TextInput>;
+  formatter?: (value: string) => string;
 }
 
 export function Input({
@@ -21,6 +22,8 @@ export function Input({
   error,
   disabled,
   InputComponent = TextInput,
+  onChangeText,
+  formatter,
   ...props
 }: IInputProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -47,6 +50,12 @@ export function Input({
     return 'default';
   }
 
+  function handleChangeText(value: string) {
+    const formattedValue = formatter?.(value) ?? value;
+
+    onChangeText?.(formattedValue);
+  }
+
   return (
     <InputComponent
       style={[
@@ -60,6 +69,7 @@ export function Input({
       onFocus={handleFocus}
       onBlur={handleBlur}
       readOnly={disabled}
+      onChangeText={handleChangeText}
       {...props}
     />
   );
