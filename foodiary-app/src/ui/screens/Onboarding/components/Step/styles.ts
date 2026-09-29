@@ -24,6 +24,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 24,
     justifyContent: 'flex-end',
   },
+  contentCenter: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   footer: {
     paddingHorizontal: 24,
     alignItems: 'flex-end',

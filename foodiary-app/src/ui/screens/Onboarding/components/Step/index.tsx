@@ -39,9 +39,14 @@ export function StepSubtitle({ children }: { children: string }) {
   );
 }
 
-export function StepContent({ children }: { children: React.ReactNode }) {
+interface IStepContentProps {
+  children: React.ReactNode;
+  position?: 'end' | 'center'
+}
+
+export function StepContent({ children, position = 'end' }: IStepContentProps) {
   return (
-    <View style={styles.content}>
+    <View style={[styles.content, position === 'center' && styles.contentCenter]}>
       {children}
     </View>
   );
