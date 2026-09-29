@@ -5,9 +5,9 @@ import {
   useFonts,
 } from '@expo-google-fonts/host-grotesk';
 
+import { Navigation } from '@app/navigation';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Greetings } from './screens/Greetings';
 
 export function App() {
   const [isFontsLoaded] = useFonts({
@@ -23,7 +23,7 @@ export function App() {
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
-        <Greetings />
+        <Navigation />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
