@@ -1,5 +1,6 @@
 import { useImperativeHandle, useRef } from 'react';
 
+import { AuthService } from '@app/services/AuthService';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -25,8 +26,13 @@ export function useSignInBottomSheetController(ref: React.Ref<ISignInBottomSheet
     open: () => bottomSheetModalRef.current?.present(),
   }), []);
 
-  const handleSubmit = form.handleSubmit(formData => {
-    Alert.alert(`Email: ${formData.email}\nSenha: ${formData.password}`);
+  const handleSubmit = form.handleSubmit(async data => {
+    try {
+      const response = await AuthService.signIn(data);
+      console.log(response);
+    } catch {
+      Alert.alert('Oops!', 'As credenciais informadas são inválidas');
+    }
   });
 
   return {
