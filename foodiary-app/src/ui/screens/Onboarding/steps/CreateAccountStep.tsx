@@ -1,9 +1,12 @@
+import { AuthService } from '@app/services/AuthService';
+import { ErrorCode } from '@app/types/ErrorCode';
 import { Button } from '@ui/components/Button';
 import { FormGroup } from '@ui/components/FormGroup';
 import { Input } from '@ui/components/Input';
+import { isAxiosError } from 'axios';
 import { useRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { TextInput, View } from 'react-native';
+import { Alert, TextInput, View } from 'react-native';
 import { Step, StepContent, StepFooter, StepHeader, StepSubtitle, StepTitle } from '../components/Step';
 import { OnboardingSchema } from '../schema';
 
@@ -14,8 +17,32 @@ export function CreateAccountStep() {
 
   const form = useFormContext<OnboardingSchema>();
 
-  const handleSubmit = form.handleSubmit(formData => {
-    console.log(JSON.stringify(formData, null, 2));
+  const handleSubmit = form.handleSubmit(async data => {
+    try {
+      const birthDate = data.birthDate.toISOString().split('T')[0];
+      const response = await AuthService.signUp({
+        account: {
+          email: data.account.email,
+          password: data.account.password,
+        },
+        profile: {
+          name: data.account.name,
+          activityLevel: data.activityLevel,
+          birthDate,
+          gender: data.gender,
+          goal: data.goal,
+          height: Number(data.height),
+          weight: Number(data.weight),
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.data?.error?.code === ErrorCode.EMAIL_ALREADY_IN_USE) {
+        Alert.alert('Oops!', 'Este e-mail já está sendo usado por outro usuário.');
+        return;
+      }
+      Alert.alert('Oops!', 'Ocorreu um erro ao criar a sua conta');
+    }
   });
 
   return (

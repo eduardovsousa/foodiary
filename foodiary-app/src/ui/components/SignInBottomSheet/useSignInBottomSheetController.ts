@@ -1,8 +1,10 @@
 import { useImperativeHandle, useRef } from 'react';
 
 import { AuthService } from '@app/services/AuthService';
+import { ErrorCode } from '@app/types/ErrorCode';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { isAxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { Alert, TextInput } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -30,8 +32,13 @@ export function useSignInBottomSheetController(ref: React.Ref<ISignInBottomSheet
     try {
       const response = await AuthService.signIn(data);
       console.log(response);
-    } catch {
-      Alert.alert('Oops!', 'As credenciais informadas são inválidas');
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.data?.error?.code === ErrorCode.INVALID_CREDENTIALS) {
+        Alert.alert('Oops!', 'As credenciais informadas são inválidas.');
+        return;
+      }
+
+      Alert.alert('Oops!', 'Ocorreu um erro ao acessar a sua conta');
     }
   });
 
