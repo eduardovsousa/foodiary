@@ -30,6 +30,5 @@ export const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: 24,
-    alignItems: 'flex-end',
   },
 });
