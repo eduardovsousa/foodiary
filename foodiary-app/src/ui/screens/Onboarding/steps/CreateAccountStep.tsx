@@ -20,6 +20,7 @@ export function CreateAccountStep() {
   const handleSubmit = form.handleSubmit(async data => {
     try {
       const birthDate = data.birthDate.toISOString().split('T')[0];
+
       const response = await AuthService.signUp({
         account: {
           email: data.account.email,
@@ -35,6 +36,7 @@ export function CreateAccountStep() {
           weight: Number(data.weight),
         },
       });
+
       console.log(response);
     } catch (error) {
       if (isAxiosError(error) && error.response?.data?.error?.code === ErrorCode.EMAIL_ALREADY_IN_USE) {
@@ -69,6 +71,7 @@ export function CreateAccountStep() {
                   onSubmitEditing={() => emailInputRef.current?.focus()}
                   value={field.value}
                   onChangeText={field.onChange}
+                  disabled={form.formState.isSubmitting}
                 />
               </FormGroup>
             )}
@@ -90,6 +93,7 @@ export function CreateAccountStep() {
                   onSubmitEditing={() => passwordInputRef.current?.focus()}
                   value={field.value}
                   onChangeText={field.onChange}
+                  disabled={form.formState.isSubmitting}
                 />
               </FormGroup>
             )}
@@ -111,6 +115,7 @@ export function CreateAccountStep() {
                   onSubmitEditing={() => confirmPasswordInputRef.current?.focus()}
                   value={field.value}
                   onChangeText={field.onChange}
+                  disabled={form.formState.isSubmitting}
                 />
               </FormGroup>
             )}
@@ -131,6 +136,7 @@ export function CreateAccountStep() {
                   returnKeyType="done"
                   value={field.value}
                   onChangeText={field.onChange}
+                  disabled={form.formState.isSubmitting}
                 />
               </FormGroup>
             )}
@@ -142,6 +148,7 @@ export function CreateAccountStep() {
         <Button
           onPress={handleSubmit}
           style={{ width: '100%' }}
+          isLoading={form.formState.isSubmitting}
         >
           Criar conta
         </Button>
