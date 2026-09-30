@@ -15,11 +15,11 @@ import {
   StepTitle,
 } from '../components/Step';
 import { useOnboarding } from '../context/useOnboarding';
-import { OnboardinScheam } from '../schema';
+import { OnboardingSchema } from '../schema';
 
 export function GoalStep() {
   const { nextStep } = useOnboarding();
-  const form = useFormContext<OnboardinScheam>();
+  const form = useFormContext<OnboardingSchema>();
 
   async function handleNextStep() {
     const isValid = await form.trigger('goal');

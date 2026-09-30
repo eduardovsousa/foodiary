@@ -25,4 +25,4 @@ export const onboardingSchema = z.object({
   ),
 });
 
-export type OnboardinScheam = z.infer<typeof onboardingSchema>;
+export type OnboardingSchema = z.infer<typeof onboardingSchema>;
