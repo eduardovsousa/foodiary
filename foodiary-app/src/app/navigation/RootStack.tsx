@@ -18,7 +18,7 @@ export type RootStackScreenProps<
 
 export type RootStackRouteProps<
   TRouteName extends keyof RootStackParamsList,
-> = RouteProp<RootStackParamsList, TRouteName>
+> = RouteProp<RootStackParamsList, TRouteName>;
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 

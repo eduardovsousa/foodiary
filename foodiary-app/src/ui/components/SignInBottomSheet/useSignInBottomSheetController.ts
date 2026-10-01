@@ -1,4 +1,4 @@
-import { useImperativeHandle, useRef } from 'react';
+import { useImperativeHandle, useRef, useState } from 'react';
 
 import { useAuth } from '@app/contexts/AuthContext/useAuth';
 import { ErrorCode } from '@app/types/ErrorCode';
@@ -16,6 +16,7 @@ export function useSignInBottomSheetController(ref: React.Ref<ISignInBottomSheet
   const { bottom } = useSafeAreaInsets();
   const passwordInputRef = useRef<TextInput>(null);
   const { signIn } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(signInSchema),
@@ -31,8 +32,10 @@ export function useSignInBottomSheetController(ref: React.Ref<ISignInBottomSheet
 
   const handleSubmit = form.handleSubmit(async data => {
     try {
+      setIsLoading(true);
       await signIn(data);
     } catch (error) {
+      setIsLoading(false);
       if (isAxiosError(error) && error.response?.data?.error?.code === ErrorCode.INVALID_CREDENTIALS) {
         Alert.alert('Oops!', 'As credenciais informadas são inválidas.');
         return;
@@ -47,6 +50,7 @@ export function useSignInBottomSheetController(ref: React.Ref<ISignInBottomSheet
     bottomSheetModalRef,
     passwordInputRef,
     form,
+    isLoading,
     handleSubmit,
   };
 }
