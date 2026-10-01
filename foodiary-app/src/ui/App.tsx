@@ -5,6 +5,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/host-grotesk';
 
+import { AuthProvider } from '@app/contexts/AuthContext/AuthProvider';
 import { Navigation } from '@app/navigation';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -23,7 +24,9 @@ export function App() {
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
-        <Navigation />
+        <AuthProvider>
+          <Navigation />
+        </AuthProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

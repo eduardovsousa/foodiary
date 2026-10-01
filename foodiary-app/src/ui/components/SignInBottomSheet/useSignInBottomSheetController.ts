@@ -1,6 +1,6 @@
 import { useImperativeHandle, useRef } from 'react';
 
-import { AuthService } from '@app/services/AuthService';
+import { useAuth } from '@app/contexts/AuthContext/useAuth';
 import { ErrorCode } from '@app/types/ErrorCode';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,12 +15,13 @@ export function useSignInBottomSheetController(ref: React.Ref<ISignInBottomSheet
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const { bottom } = useSafeAreaInsets();
   const passwordInputRef = useRef<TextInput>(null);
+  const { signIn } = useAuth();
 
   const form = useForm({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'teste@mail.com',
+      password: '12345678',
     },
   });
 
@@ -30,15 +31,14 @@ export function useSignInBottomSheetController(ref: React.Ref<ISignInBottomSheet
 
   const handleSubmit = form.handleSubmit(async data => {
     try {
-      const response = await AuthService.signIn(data);
-      console.log(response);
+      await signIn(data);
     } catch (error) {
       if (isAxiosError(error) && error.response?.data?.error?.code === ErrorCode.INVALID_CREDENTIALS) {
         Alert.alert('Oops!', 'As credenciais informadas são inválidas.');
         return;
       }
 
-      Alert.alert('Oops!', 'Ocorreu um erro ao acessar a sua conta');
+      Alert.alert('Oops!', 'Ocorr-eu um erro ao acessar a sua conta');
     }
   });
 
