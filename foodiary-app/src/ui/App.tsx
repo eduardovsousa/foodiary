@@ -6,7 +6,9 @@ import {
 } from '@expo-google-fonts/host-grotesk';
 
 import { AuthProvider } from '@app/contexts/AuthContext/AuthProvider';
+import { queryClient } from '@app/lib/queryClient';
 import { Navigation } from '@app/navigation';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -24,9 +26,11 @@ export function App() {
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
-        <AuthProvider>
-          <Navigation />
-        </AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <Navigation />
+          </AuthProvider>
+        </QueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
