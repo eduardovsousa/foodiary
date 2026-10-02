@@ -6,13 +6,16 @@ import { View } from 'react-native';
 
 export function Home() {
   const { signOut } = useAuth();
-  const { account } = useAccount();
+  const { account, loadAccount } = useAccount();
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <AppText>Bem-vindo {account?.profile.name}</AppText>
       <Button onPress={signOut}>
         Sair
+      </Button>
+      <Button onPress={() => loadAccount()}>
+        Recaregar
       </Button>
     </View>
   );
