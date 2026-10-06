@@ -22,6 +22,6 @@ export const styles = StyleSheet.create({
     borderRadius: 24,
   },
   greetings: {
-
+    gap: 2,
   },
 });
