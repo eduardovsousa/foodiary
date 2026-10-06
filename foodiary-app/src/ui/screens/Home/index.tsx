@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { EmptyState } from './components/EmptyState';
+import { FullScreenLoader } from './components/FullScreenLoader';
 import { Header } from './components/Header';
 import { ItemSeparatorComponent } from './components/ItemSeparatorComponent';
 import { MealCard } from './components/MealCard';
@@ -14,12 +15,16 @@ export function Home() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { top, bottom } = useSafeAreaInsets();
 
-  useMeals(new Date());
+  const { isInitialLoading } = useMeals(new Date());
 
   async function handleRefresh() {
     setIsRefreshing(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
     setIsRefreshing(false);
+  }
+
+  if (isInitialLoading) {
+    return <FullScreenLoader />;
   }
 
   return (
