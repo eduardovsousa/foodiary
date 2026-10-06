@@ -1,12 +1,15 @@
+import { LucideIcon } from 'lucide-react-native';
 import { ActivityIndicator, Platform, Pressable, View } from 'react-native';
 
 import { theme } from '@ui/styles/theme';
 import { AppText } from '../AppText';
+
 import { buttonStyles, ButtonVariants, styles } from './styles';
 
 interface IButtonProps extends React.ComponentProps<typeof Pressable>,
   Omit<ButtonVariants, 'disabled'> {
   isLoading?: boolean;
+  leftIcon?: LucideIcon;
 };
 
 export function Button({
@@ -16,6 +19,7 @@ export function Button({
   variant,
   style,
   isLoading,
+  leftIcon: LeftIcon,
   ...props
 }: IButtonProps) {
   const disabled = disabledProp || isLoading;
@@ -38,7 +42,12 @@ export function Button({
         disabled={disabled}
         {...props}
       >
-        {!isLoading ? chieldEl : (
+        {!isLoading ? (
+          <View style={styles.content}>
+            {LeftIcon && <LeftIcon color={theme.colors.black[700]} size={20} />}
+            {chieldEl as React.ReactElement}
+          </View>
+        ) : (
           <ActivityIndicator color={theme.colors.black[700]} />
         )}
       </Pressable>

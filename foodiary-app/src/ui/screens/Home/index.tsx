@@ -1,20 +1,25 @@
 import { useAuth } from '@app/contexts/AuthContext/useAuth';
 import { AppText } from '@ui/components/AppText';
-import { Button } from '@ui/components/Button';
 import { WelcomeModal } from '@ui/components/WelcomeModal';
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
+import { Header } from './components/Header';
+import { styles } from './styles';
 
 export function Home() {
   const { signedUp, signOut } = useAuth();
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles.container}>
       <WelcomeModal />
-      <AppText>
-        Home - {signedUp ? 'Acabou de cadastrar' : 'Só logou'}
-      </AppText>
-      <Button onPress={signOut}>
-        Sair
-      </Button>
-    </View>
+
+      <FlatList
+        data={[1, 2, 3, 4, 5]}
+        keyExtractor={item => String(item)}
+        ListHeaderComponent={Header}
+        renderItem={() => (
+          <AppText>item</AppText>
+        )}
+      />
+    </View >
   );
 }
