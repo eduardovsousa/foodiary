@@ -1,3 +1,4 @@
+import { useMeals } from '@app/hooks/queries/useMeals';
 import { WelcomeModal } from '@ui/components/WelcomeModal';
 import { theme } from '@ui/styles/theme';
 import { useState } from 'react';
@@ -12,6 +13,8 @@ import { styles } from './styles';
 export function Home() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { top, bottom } = useSafeAreaInsets();
+
+  useMeals(new Date());
 
   async function handleRefresh() {
     setIsRefreshing(true);
