@@ -5,16 +5,21 @@ import { CurrentGoal } from '../CurrentGoal';
 import { DateSwitcher } from '../DateSwitcher';
 import { UserHeader } from '../UserHeader';
 
+import { Meal } from '@app/types/Meal';
 import { styles } from './styles';
 
-export function Header() {
+interface IHeaderProps {
+  meals: Meal[];
+}
+
+export function Header({ meals }: IHeaderProps) {
   return (
     <View>
       <UserHeader />
 
       <View style={styles.container}>
         <DateSwitcher />
-        <CurrentGoal />
+        <CurrentGoal meals={meals} />
 
         <View style={styles.divider} />
         <AppText

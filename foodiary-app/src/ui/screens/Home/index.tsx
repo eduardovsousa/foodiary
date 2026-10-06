@@ -35,7 +35,7 @@ export function Home() {
         data={meals}
         keyExtractor={item => item.id}
         contentContainerStyle={[styles.content, { paddingBottom: bottom + 24 }]}
-        ListHeaderComponent={Header}
+        ListHeaderComponent={<Header meals={meals} />}
         ListEmptyComponent={EmptyState}
         ItemSeparatorComponent={ItemSeparatorComponent}
         refreshControl={(
