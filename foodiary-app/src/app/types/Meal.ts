@@ -10,5 +10,5 @@ export type Meal = {
     proteins: number;
     carbohydrates: number;
     fats: number;
-  };
+  }[];
 }

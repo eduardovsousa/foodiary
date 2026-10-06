@@ -15,7 +15,7 @@ export function Home() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { top, bottom } = useSafeAreaInsets();
 
-  const { isInitialLoading } = useMeals(new Date());
+  const { isInitialLoading, meals } = useMeals(new Date());
 
   async function handleRefresh() {
     setIsRefreshing(true);
@@ -32,8 +32,8 @@ export function Home() {
       <WelcomeModal />
 
       <FlatList
-        data={[1, 2, 3, 4, 5]}
-        keyExtractor={item => String(item)}
+        data={meals}
+        keyExtractor={item => item.id}
         contentContainerStyle={[styles.content, { paddingBottom: bottom + 24 }]}
         ListHeaderComponent={Header}
         ListEmptyComponent={EmptyState}
@@ -46,8 +46,8 @@ export function Home() {
             colors={[theme.colors.lime[700]]}
           />
         )}
-        renderItem={() => (
-          <MealCard />
+        renderItem={({ item: meal }) => (
+          <MealCard meal={meal} />
         )}
       />
     </View >
