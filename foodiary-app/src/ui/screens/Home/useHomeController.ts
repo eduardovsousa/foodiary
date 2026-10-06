@@ -7,11 +7,11 @@ export function useHomeController() {
   const [date, setDate] = useState(new Date());
   const { top, bottom } = useSafeAreaInsets();
 
-  const { isInitialLoading, meals, isLoading } = useMeals(date);
+  const { isInitialLoading, meals, isLoading, reloadMeal } = useMeals(date);
 
   async function handleRefresh() {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await reloadMeal();
     setIsRefreshing(false);
   }
 

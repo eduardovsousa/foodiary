@@ -4,7 +4,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 export function useMeals(date: Date) {
   const formattedDate = date.toISOString().split('T')[0];
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['meals', formattedDate],
     placeholderData: keepPreviousData,
     queryFn: async () => {
@@ -18,5 +18,6 @@ export function useMeals(date: Date) {
     meals: data ?? [],
     isInitialLoading: isLoading,
     isLoading: isFetching,
+    reloadMeal: refetch,
   };
 }
