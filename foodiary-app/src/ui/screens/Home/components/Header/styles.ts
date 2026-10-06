@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 16,
     paddingHorizontal: 8,
     paddingVertical: 12,
-    marginTop: 14,
+    marginTop: -16,
   },
   divider: {
     backgroundColor: theme.colors.gray[200],
@@ -19,5 +19,6 @@ export const styles = StyleSheet.create({
   },
   mealsLabel: {
     letterSpacing: 1.28,
+    paddingHorizontal: 8,
   },
 });

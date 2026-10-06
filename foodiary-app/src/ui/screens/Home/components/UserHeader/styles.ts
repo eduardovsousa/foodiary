@@ -1,3 +1,4 @@
+import { theme } from '@ui/styles/theme';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -6,6 +7,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
+    backgroundColor: theme.colors.lime[400],
+    paddingBottom: 30,
   },
   userInfo: {
     flexDirection: 'row',

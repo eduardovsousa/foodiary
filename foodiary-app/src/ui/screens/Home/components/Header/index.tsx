@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { AppText } from '@ui/components/AppText';
 import { CurrentGoal } from '../CurrentGoal';
 import { DateSwitcher } from '../DateSwitcher';
-import { UserHeader } from '../UserHeader/inedex';
+import { UserHeader } from '../UserHeader';
 
 import { styles } from './styles';
 

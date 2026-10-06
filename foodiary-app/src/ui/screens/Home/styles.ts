@@ -6,4 +6,10 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.lime[400],
   },
+  content: {
+    backgroundColor: theme.colors.white,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    minHeight: '100%',
+  },
 });

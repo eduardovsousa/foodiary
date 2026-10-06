@@ -1,6 +1,5 @@
 import { TargetIcon } from 'lucide-react-native';
 import { Image, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAccount } from '@app/hooks/queries/useAccount';
 import { AppText } from '@ui/components/AppText';
@@ -11,10 +10,9 @@ import { styles } from './styles';
 
 export function UserHeader() {
   const { account } = useAccount();
-  const { top } = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { paddingTop: top }]}>
+    <View style={styles.container}>
       <View style={styles.userInfo}>
         <Image
           source={{ uri: 'https://github.com/eduardovsousa.png' }}
