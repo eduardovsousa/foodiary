@@ -20,6 +20,7 @@ export function Home() {
     date,
     isInitialLoading,
     meals,
+    isLoading,
     handleRefresh,
     handleNextDay,
     handlePreviousDay,
@@ -36,6 +37,7 @@ export function Home() {
       <HomeProvider
         date={date}
         meals={meals}
+        isLoading={isLoading}
         nextDay={handleNextDay}
         previousDay={handlePreviousDay}
       >

@@ -4,14 +4,20 @@ import { Platform, Pressable, View } from 'react-native';
 import { AppText } from '../AppText';
 import { styles } from './styles';
 
-export function CreateMealOptions() {
+interface ICreateMealOptionsProps {
+  disabled?: boolean;
+}
+
+export function CreateMealOptions({ disabled = false }: ICreateMealOptionsProps) {
   return (
     <View style={styles.container}>
       <OptionButton
+        disabled={disabled}
         icon={MicIcon}
         label='Áudio'
       />
       <OptionButton
+        disabled={disabled}
         icon={CameraIcon}
         label='Foto'
       />
@@ -22,16 +28,18 @@ export function CreateMealOptions() {
 interface IOptionButtonProps {
   icon: LucideIcon;
   label: string;
+  disabled: boolean;
 }
 
-function OptionButton({ icon: Icon, label }: IOptionButtonProps) {
+function OptionButton({ icon: Icon, label, disabled }: IOptionButtonProps) {
   return (
     <View style={styles.buttonWrapper}>
       <Pressable
+        disabled={disabled}
         android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
         style={({ pressed }) => [
           styles.button,
-          pressed && Platform.OS === 'ios' && { opacity: 0.5 },
+          (disabled || (pressed && Platform.OS === 'ios')) && { opacity: 0.5 },
         ]}
       >
         <View style={styles.icon}>

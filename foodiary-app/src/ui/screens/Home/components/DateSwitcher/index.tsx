@@ -7,11 +7,16 @@ import { useHomeContext } from '../../context/useHomeContex';
 import { styles } from './styles';
 
 export function DateSwitcher() {
-  const { date , nextDay, previousDay } = useHomeContext();
+  const { isLoading, date, nextDay, previousDay } = useHomeContext();
 
   return (
-    <View style={styles.container}>
-      <Button size='icon' variant='ghost' onPress={previousDay}>
+    <View style={[styles.container, { opacity: isLoading ? 0.5 : 1 }]}>
+      <Button
+        size='icon'
+        variant='ghost'
+        onPress={previousDay}
+        disabled={isLoading}
+      >
         <ChevronLeftIcon />
       </Button>
 
@@ -23,7 +28,12 @@ export function DateSwitcher() {
         {formatDate(date)}
       </AppText>
 
-      <Button size='icon' variant='ghost' onPress={nextDay}>
+      <Button
+        size='icon'
+        variant='ghost'
+        onPress={nextDay}
+        disabled={isLoading}
+      >
         <ChevronRightIcon />
       </Button>
 

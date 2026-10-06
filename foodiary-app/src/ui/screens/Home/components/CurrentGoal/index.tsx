@@ -9,7 +9,7 @@ import { styles } from './styles';
 
 export function CurrentGoal() {
   const { account } = useAccount();
-  const { meals } = useHomeContext();
+  const { meals, isLoading } = useHomeContext();
 
   const summary = useMemo(() => (
     meals.flatMap(meal => meal.foods).reduce(
@@ -24,7 +24,7 @@ export function CurrentGoal() {
   ), [meals]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { opacity: isLoading ? 0.5 : 1 }]}>
       <GoalStats
         calories={{ goal: account!.goal.calories, current: summary.calories }}
         carbohydrates={{ goal: account!.goal.carbohydrates, current: summary.carbohydrates }}

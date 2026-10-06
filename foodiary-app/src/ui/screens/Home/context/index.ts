@@ -4,6 +4,7 @@ import { createContext } from 'react';
 export interface IHomeContextValue {
   date: Date;
   meals: Meal[];
+  isLoading: boolean;
   previousDay: () => void;
   nextDay: () => void;
 }

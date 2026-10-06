@@ -7,7 +7,7 @@ export function useHomeController() {
   const [date, setDate] = useState(new Date());
   const { top, bottom } = useSafeAreaInsets();
 
-  const { isInitialLoading, meals } = useMeals(date);
+  const { isInitialLoading, meals, isLoading } = useMeals(date);
 
   async function handleRefresh() {
     setIsRefreshing(true);
@@ -40,6 +40,7 @@ export function useHomeController() {
     date,
     isInitialLoading,
     meals,
+    isLoading,
     handleRefresh,
     handleNextDay,
     handlePreviousDay,

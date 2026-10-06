@@ -5,9 +5,11 @@ import { CurrentGoal } from '../CurrentGoal';
 import { DateSwitcher } from '../DateSwitcher';
 import { UserHeader } from '../UserHeader';
 
+import { useHomeContext } from '../../context/useHomeContex';
 import { styles } from './styles';
 
 export function Header() {
+  const { isLoading } = useHomeContext();
 
   return (
     <View>
@@ -19,7 +21,7 @@ export function Header() {
 
         <View style={styles.divider} />
         <AppText
-          style={styles.mealsLabel}
+          style={[styles.mealsLabel, { opacity: isLoading ? 0.5 : 1 }]}
           weight='medium'
         >
           REFEIÇÕES

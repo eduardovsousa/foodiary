@@ -1,11 +1,12 @@
 import { MealsService } from '@app/services/MealsService';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 export function useMeals(date: Date) {
   const formattedDate = date.toISOString().split('T')[0];
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ['meals', formattedDate],
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       const { meals } = await MealsService.getMealsByDate(formattedDate);
       return meals;
@@ -16,5 +17,6 @@ export function useMeals(date: Date) {
   return {
     meals: data ?? [],
     isInitialLoading: isLoading,
+    isLoading: isFetching,
   };
 }
