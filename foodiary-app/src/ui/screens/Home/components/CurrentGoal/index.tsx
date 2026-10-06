@@ -1,16 +1,15 @@
-import { useAccount } from '@app/hooks/queries/useAccount';
-import { Meal } from '@app/types/Meal';
-import { GoalStats } from '@ui/components/GoalStats';
 import { useMemo } from 'react';
 import { View } from 'react-native';
+
+import { useAccount } from '@app/hooks/queries/useAccount';
+import { useHomeContext } from '../../context/useHomeContex';
+
+import { GoalStats } from '@ui/components/GoalStats';
 import { styles } from './styles';
 
-interface ICurrentGoalProps {
-  meals: Meal[];
-}
-
-export function CurrentGoal({ meals }: ICurrentGoalProps) {
+export function CurrentGoal() {
   const { account } = useAccount();
+  const { meals } = useHomeContext();
 
   const summary = useMemo(() => (
     meals.flatMap(meal => meal.foods).reduce(
