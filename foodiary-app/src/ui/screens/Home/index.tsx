@@ -1,4 +1,3 @@
-import { useAuth } from '@app/contexts/AuthContext/useAuth';
 import { AppText } from '@ui/components/AppText';
 import { WelcomeModal } from '@ui/components/WelcomeModal';
 import { FlatList, View } from 'react-native';
@@ -6,8 +5,6 @@ import { Header } from './components/Header';
 import { styles } from './styles';
 
 export function Home() {
-  const { signedUp, signOut } = useAuth();
-
   return (
     <View style={styles.container}>
       <WelcomeModal />
