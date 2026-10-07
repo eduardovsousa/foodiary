@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Platform, Pressable, View } from 'react-native';
 import { AppText } from '../AppText';
 import { AudioModal } from '../AudioModal';
+import { PictureModal } from '../PictureModal';
 import { styles } from './styles';
 
 interface ICreateMealOptionsProps {
@@ -14,7 +15,7 @@ export function CreateMealOptions({ disabled = false }: ICreateMealOptionsProps)
   const [
     currentVisibleModal,
     setCurrentVisibleModal,
-  ] = useState<null | 'audio' | 'picture'>('audio');
+  ] = useState<null | 'audio' | 'picture'>(null);
 
   function handleOpenModal(modal: 'audio' | 'picture') {
     setCurrentVisibleModal(modal);
@@ -28,6 +29,10 @@ export function CreateMealOptions({ disabled = false }: ICreateMealOptionsProps)
     <View style={styles.container}>
       <AudioModal
         visible={currentVisibleModal === 'audio'}
+        onClose={handleCloseModal}
+      />
+      <PictureModal
+        visible={currentVisibleModal === 'picture'}
         onClose={handleCloseModal}
       />
 
