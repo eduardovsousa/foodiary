@@ -24,7 +24,8 @@
     "plugins": [
       "@react-native-community/datetimepicker",
       "expo-splash-screen",
-      "expo-video"
+      "expo-video",
+      "expo-audio"
     ]
   }
 }

@@ -18,8 +18,11 @@ export function AudioModal({ visible, onClose }: IAudioModalProps) {
   const {
     state,
     isLoading,
+    audioUri,
     handleStartRecording,
     handleStopRecording,
+    handleTyAgain,
+    handleConfirm,
   } = useAudioModalController();
 
   const isRecording = state === 'recording';
@@ -62,7 +65,7 @@ export function AudioModal({ visible, onClose }: IAudioModalProps) {
                   style={styles.instructionsLabel}
                   align='center'
                 >
-                  Tente dizer al como: 100g de Arroz, 2 Ovos e 100g de Salada
+                  Tente dizer algo como: 100g de Arroz, 2 Ovos e 100g de Salada
                 </AppText>
               </View>
 
@@ -70,8 +73,11 @@ export function AudioModal({ visible, onClose }: IAudioModalProps) {
                 <View style={styles.actionsContainer}>
                   <Actions
                     state={state}
+                    audioUri={audioUri}
                     onStartRecording={handleStartRecording}
                     onStopRecording={handleStopRecording}
+                    onTryAgain={handleTyAgain}
+                    onConfirm={handleConfirm}
                   />
                 </View>
               </View>

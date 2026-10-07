@@ -10,11 +10,21 @@ import { AudioModalState } from './useAudioModalController';
 
 interface IActionsProps {
   state: AudioModalState;
+  audioUri: string | null;
   onStartRecording: () => void;
   onStopRecording: () => void;
+  onTryAgain: () => void;
+  onConfirm: () => void;
 }
 
-export function Actions({ state, onStartRecording,onStopRecording }: IActionsProps) {
+export function Actions({
+  state,
+  audioUri,
+  onStartRecording,
+  onStopRecording,
+  onTryAgain,
+  onConfirm,
+}: IActionsProps) {
   const [recordingTimeInSeconds, setRecordingTimeInSeconds] = useState(0);
 
   useEffect(() => {
@@ -32,6 +42,19 @@ export function Actions({ state, onStartRecording,onStopRecording }: IActionsPro
       }
     };
   }, [state]);
+
+  useEffect(() => {
+    const MAX_DURATION = 30;
+
+    if (recordingTimeInSeconds >= MAX_DURATION) {
+      onStopRecording();
+    }
+  }, [recordingTimeInSeconds, onStopRecording]);
+
+  function handleTyAgain() {
+    setRecordingTimeInSeconds(0);
+    onTryAgain();
+  }
 
   if (state === 'idle') {
     return (
@@ -83,8 +106,14 @@ export function Actions({ state, onStartRecording,onStopRecording }: IActionsPro
     );
   }
 
-  if (state === 'recorded') {
-    return <AudioPlayer duration={100} />;
+  if (state === 'recorded' && audioUri) {
+    return (
+      <AudioPlayer
+        audioUri={audioUri}
+        onTryAgain={handleTyAgain}
+        onConfirm={onConfirm}
+      />
+    );
   }
 
   return null;
