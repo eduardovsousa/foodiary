@@ -33,7 +33,7 @@ export function Button({
   return (
     <View style={styles.wrapper}>
       <Pressable
-        android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
+        android_ripple={{ color: 'rgba(0, 0, 0, 0.1)', foreground: true }}
         style={({ pressed }) => [
           buttonStyles({ size, variant, disabled: disabled ? 'true' : 'false' }),
           pressed && Platform.OS === 'ios' && { opacity: 0.7 },

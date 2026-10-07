@@ -36,7 +36,7 @@ function OptionButton({ icon: Icon, label, disabled }: IOptionButtonProps) {
     <View style={styles.buttonWrapper}>
       <Pressable
         disabled={disabled}
-        android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
+        android_ripple={{ color: 'rgba(0, 0, 0, 0.1)', foreground: true }}
         style={({ pressed }) => [
           styles.button,
           (disabled || (pressed && Platform.OS === 'ios')) && { opacity: 0.5 },

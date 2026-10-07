@@ -4,6 +4,7 @@ import { WelcomeModal } from '@ui/components/WelcomeModal';
 import { theme } from '@ui/styles/theme';
 
 import { EmptyState } from './components/EmptyState';
+import { Fab } from './components/Fab';
 import { FullScreenLoader } from './components/FullScreenLoader';
 import { Header } from './components/Header';
 import { ItemSeparatorComponent } from './components/ItemSeparatorComponent';
@@ -61,6 +62,8 @@ export function Home() {
           )}
         />
       </HomeProvider>
+
+      {meals.length > 0 && <Fab />}
     </View >
   );
 }
