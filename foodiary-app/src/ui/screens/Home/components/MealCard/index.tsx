@@ -1,10 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
+import { useMemo } from 'react';
 import { Platform, Pressable, View } from 'react-native';
 
+import { AppStackNavigationProps } from '@app/navigation/AppStack';
 import { SimplifiedMeal } from '@app/types/Meal';
 import { AppText } from '@ui/components/AppText';
 import { theme } from '@ui/styles/theme';
-import { useMemo } from 'react';
 import { useHomeContext } from '../../context/useHomeContex';
+
 import { styles } from './styles';
 
 interface IMealCardProps {
@@ -13,6 +16,7 @@ interface IMealCardProps {
 
 export function MealCard({ meal }: IMealCardProps) {
   const { isLoading } = useHomeContext();
+  const { navigate } = useNavigation<AppStackNavigationProps>();
 
   const formattedFoods = useMemo(() => (
     meal.foods.map(food => food.name).join(', ')
@@ -38,6 +42,7 @@ export function MealCard({ meal }: IMealCardProps) {
 
       <View style={styles.wrapper}>
         <Pressable
+          onPress={() => navigate('MealDetails', { mealId: meal.id })}
           disabled={isLoading}
           android_ripple={{ color: 'rgba(0, 0, 0, 0.1)', foreground: true }}
           style={({ pressed }) => [
@@ -71,7 +76,7 @@ export function MealCard({ meal }: IMealCardProps) {
             <View style={styles.mealStatsRow}>
               <View style={styles.mealStat}>
                 <AppText color={theme.colors.support.tomato} weight='medium'>
-                  {summary.calories}
+                  {summary.calories.toFixed(2)}
                 </AppText>
                 <AppText color={theme.colors.gray[700]}>
                   Kcal
@@ -80,7 +85,7 @@ export function MealCard({ meal }: IMealCardProps) {
 
               <View style={styles.mealStat}>
                 <AppText color={theme.colors.support.teal} weight='medium'>
-                  {summary.proteins}g
+                  {summary.proteins.toFixed(2)}g
                 </AppText>
                 <AppText color={theme.colors.gray[700]}>
                   Proteínas
@@ -91,7 +96,7 @@ export function MealCard({ meal }: IMealCardProps) {
             <View style={styles.mealStatsRow}>
               <View style={styles.mealStat}>
                 <AppText color={theme.colors.support.yellow} weight='medium'>
-                  {summary.carbohydrates}g
+                  {summary.carbohydrates.toFixed(2)}g
                 </AppText>
                 <AppText color={theme.colors.gray[700]}>
                   Carboidratos
@@ -100,7 +105,7 @@ export function MealCard({ meal }: IMealCardProps) {
 
               <View style={styles.mealStat}>
                 <AppText color={theme.colors.support.orange} weight='medium'>
-                  {summary.fats}g
+                  {summary.fats.toFixed(2)}g
                 </AppText>
                 <AppText color={theme.colors.gray[700]}>
                   Gorduras
