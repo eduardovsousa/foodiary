@@ -1,6 +1,6 @@
 import { Platform, Pressable, View } from 'react-native';
 
-import { Meal } from '@app/types/Meal';
+import { SimplifiedMeal } from '@app/types/Meal';
 import { AppText } from '@ui/components/AppText';
 import { theme } from '@ui/styles/theme';
 import { useMemo } from 'react';
@@ -8,7 +8,7 @@ import { useHomeContext } from '../../context/useHomeContex';
 import { styles } from './styles';
 
 interface IMealCardProps {
-  meal: Meal
+  meal: SimplifiedMeal
 }
 
 export function MealCard({ meal }: IMealCardProps) {

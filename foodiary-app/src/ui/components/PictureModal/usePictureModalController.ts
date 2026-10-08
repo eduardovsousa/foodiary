@@ -1,4 +1,6 @@
 import { useCreateMeal } from '@app/hooks/mutations/useCreateMeal';
+import { useMeal } from '@app/hooks/queries/useMeal';
+import axios from 'axios';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRef, useState } from 'react';
 import { Linking } from 'react-native';
@@ -7,7 +9,13 @@ export function usePictureModalController() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
   const [photoUri, setPhotoUri] = useState<null | string>(null);
-  const { createMeal } = useCreateMeal();
+  const { createMeal, isLoading: isCreatingMeal, createdMealId } = useCreateMeal();
+
+  const {
+    meal,
+    isLoading: isLoadingMeal,
+    isProcessing: isProcessingMeal,
+  } = useMeal(createdMealId);
 
   async function handleRequestPermission() {
     if (permission?.granted) {
@@ -34,7 +42,7 @@ export function usePictureModalController() {
     setPhotoUri(picture.uri);
   }
 
-  function handleTyAgain() {
+  function handleTryAgain() {
     setPhotoUri(null);
   }
 
@@ -46,17 +54,22 @@ export function usePictureModalController() {
     try {
       await createMeal(photoUri);
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        console.log(
+          'DATA:',
+          JSON.stringify(error.response?.data, null, 2),
+        );
+      }
     }
   }
 
   return {
-    isLoading: false,
+    isLoading: isCreatingMeal || isLoadingMeal || isProcessingMeal,
     permission,
     cameraRef,
     photoUri,
     handleRequestPermission,
-    handleTyAgain,
+    handleTyAgain: handleTryAgain,
     handleConfirm,
     handleTakePicture,
   };

@@ -3,11 +3,11 @@ import { MealsService } from '@app/services/MealsService';
 import { useMutation } from '@tanstack/react-query';
 
 export function useCreateMeal() {
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending, data } = useMutation({
     mutationFn: async (fileUri: string) => {
       const { size, type, filename } = await getFileInfo(fileUri);
 
-      await MealsService.createMeal({
+      const { mealId } = await MealsService.createMeal({
         file: {
           size,
           type,
@@ -15,10 +15,14 @@ export function useCreateMeal() {
           uri: fileUri,
         },
       });
+
+      return { mealId };
     },
   });
 
   return {
     createMeal: mutateAsync,
+    isLoading: isPending,
+    createdMealId: data?.mealId,
   };
 }
