@@ -19,10 +19,42 @@ export class MealsService extends Service {
       })),
     };
   }
+
+  static async createMeal(
+    payload: MealsService.CreateMealPayload,
+  ): Promise<MealsService.CreateMealResponse> {
+    const { data } = await this.client.post<MealsService.CreateMealResponse>(
+      '/meals', payload);
+
+    await this.uploadPresignedPOST({
+      uploadSignature: data.uploadSignature,
+      file: {
+        type: payload.file.type,
+        uri: payload.file.uri,
+        name: payload.file.name,
+      },
+    });
+
+    return data;
+  }
 }
 
 export namespace MealsService {
   export type GetMealsByDateResponse = {
     meals: Meal[];
+  };
+
+  export type CreateMealPayload = {
+    file: {
+      type: 'audio/m4a' | 'image/jpeg';
+      size: number;
+      uri: string;
+      name: string;
+    }
+  };
+
+  export type CreateMealResponse = {
+    mealId: string;
+    uploadSignature: string;
   };
 }
