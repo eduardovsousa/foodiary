@@ -21,7 +21,7 @@ export class AuthTokensManager {
     }
   }
 
-  static async clearTokens() {
+  static async clear() {
     await AsyncStorage.removeItem(this.KEY);
   }
 }

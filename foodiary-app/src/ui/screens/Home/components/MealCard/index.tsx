@@ -23,16 +23,22 @@ export function MealCard({ meal }: IMealCardProps) {
   ), [meal.foods]);
 
   const summary = useMemo(() => (
-    meal.foods.reduce(
-      (acc, food) => ({
-        calories: acc.calories + food.calories,
-        proteins: acc.proteins + food.proteins,
-        carbohydrates: acc.carbohydrates + food.carbohydrates,
-        fats: acc.fats + food.fats,
-      }),
+    (meal?.foods ?? []).reduce(
+      (acc, food) => {
+        const proteinsCalories = food.proteins * 4;
+        const carbohydratesCalories = food.carbohydrates * 4;
+        const fatsCalories = food.fats * 9;
+        const totalCalories = proteinsCalories + carbohydratesCalories + fatsCalories;
+
+        return {
+          calories: Math.round(acc.calories + totalCalories),
+          proteins: Math.round(acc.proteins + food.proteins),
+          carbohydrates: Math.round(acc.carbohydrates + food.carbohydrates),
+          fats: Math.round(acc.fats + food.fats),
+        };
+      },
       { calories: 0, proteins: 0, carbohydrates: 0, fats: 0 },
-    )
-  ), [meal.foods]);
+    )), [meal?.foods]);
 
   return (
     <View style={[styles.container, { opacity: isLoading ? 0.5 : 1 }]}>
@@ -76,7 +82,7 @@ export function MealCard({ meal }: IMealCardProps) {
             <View style={styles.mealStatsRow}>
               <View style={styles.mealStat}>
                 <AppText color={theme.colors.support.tomato} weight='medium'>
-                  {summary.calories.toFixed(2)}
+                  {summary.calories}
                 </AppText>
                 <AppText color={theme.colors.gray[700]}>
                   Kcal
@@ -85,7 +91,7 @@ export function MealCard({ meal }: IMealCardProps) {
 
               <View style={styles.mealStat}>
                 <AppText color={theme.colors.support.teal} weight='medium'>
-                  {summary.proteins.toFixed(2)}g
+                  {summary.proteins}g
                 </AppText>
                 <AppText color={theme.colors.gray[700]}>
                   Proteínas
@@ -96,7 +102,7 @@ export function MealCard({ meal }: IMealCardProps) {
             <View style={styles.mealStatsRow}>
               <View style={styles.mealStat}>
                 <AppText color={theme.colors.support.yellow} weight='medium'>
-                  {summary.carbohydrates.toFixed(2)}g
+                  {summary.carbohydrates}g
                 </AppText>
                 <AppText color={theme.colors.gray[700]}>
                   Carboidratos
@@ -105,7 +111,7 @@ export function MealCard({ meal }: IMealCardProps) {
 
               <View style={styles.mealStat}>
                 <AppText color={theme.colors.support.orange} weight='medium'>
-                  {summary.fats.toFixed(2)}g
+                  {summary.fats}g
                 </AppText>
                 <AppText color={theme.colors.gray[700]}>
                   Gorduras

@@ -13,15 +13,21 @@ export function CurrentGoal() {
 
   const summary = useMemo(() => (
     meals.flatMap(meal => meal.foods).reduce(
-      (acc, food) => ({
-        calories: acc.calories + food.calories,
-        proteins: acc.proteins + food.proteins,
-        carbohydrates: acc.carbohydrates + food.carbohydrates,
-        fats: acc.fats + food.fats,
-      }),
+      (acc, food) => {
+        const proteinsCalories = food.proteins * 4;
+        const carbohydratesCalories = food.carbohydrates * 4;
+        const fatsCalories = food.fats * 9;
+        const totalCalories = proteinsCalories + carbohydratesCalories + fatsCalories;
+
+        return {
+          calories: Math.round(acc.calories + totalCalories),
+          proteins: Math.round(acc.proteins + food.proteins),
+          carbohydrates: Math.round(acc.carbohydrates + food.carbohydrates),
+          fats: Math.round(acc.fats + food.fats),
+        };
+      },
       { calories: 0, proteins: 0, carbohydrates: 0, fats: 0 },
-    )
-  ), [meals]);
+    )), [meals]);
 
   return (
     <View style={[styles.container, { opacity: isLoading ? 0.5 : 1 }]}>
