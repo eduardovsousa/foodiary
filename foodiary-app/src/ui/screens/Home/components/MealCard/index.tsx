@@ -25,10 +25,10 @@ export function MealCard({ meal }: IMealCardProps) {
   const summary = useMemo(() => (
     (meal?.foods ?? []).reduce(
       (acc, food) => {
-        const proteinsCalories = food.proteins * 4;
-        const carbohydratesCalories = food.carbohydrates * 4;
-        const fatsCalories = food.fats * 9;
-        const totalCalories = proteinsCalories + carbohydratesCalories + fatsCalories;
+        const proteinsCalories = Math.round(food.proteins * 4);
+        const carbohydratesCalories = Math.round(food.carbohydrates * 4);
+        const fatsCalories = Math.round(food.fats * 9);
+        const totalCalories = Math.round(proteinsCalories + carbohydratesCalories + fatsCalories);
 
         return {
           calories: Math.round(acc.calories + totalCalories),

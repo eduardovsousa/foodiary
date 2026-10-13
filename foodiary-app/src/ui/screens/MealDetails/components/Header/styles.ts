@@ -1,5 +1,5 @@
 import { theme } from '@ui/styles/theme';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -64,5 +64,24 @@ export const styles = StyleSheet.create({
   fatsProgress: {
     height: '100%',
     backgroundColor: theme.colors.support.orange,
+  },
+  divider: {
+    marginTop: 20,
+    height: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.gray[400],
+    borderStyle: Platform.select({
+      ios: 'solid',
+      android: 'dashed',
+    }),
+  },
+  mealName: {
+    letterSpacing: -0.24,
+    margin: 20,
+    marginBottom: 24,
+  },
+  mealItemsHeader: {
+    marginHorizontal: 20,
+    marginBottom: 8,
   },
 });

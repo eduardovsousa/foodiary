@@ -9,7 +9,7 @@ import { AppText } from '@ui/components/AppText';
 import { Button } from '@ui/components/Button';
 import { theme } from '@ui/styles/theme';
 
-import { Meal } from '@app/types/Meal';
+import { Meal, MealInputType } from '@app/types/Meal';
 import { useMemo } from 'react';
 import { styles } from './styles';
 
@@ -21,13 +21,15 @@ export function Header({ meal }: IHeaderProps) {
   const { top } = useSafeAreaInsets();
   const { goBack } = useNavigation();
 
+  const isPictureInput = meal?.inputType === MealInputType.PICTURE;
+
   const summary = useMemo(() => (
     (meal?.foods ?? []).reduce(
       (acc, food) => {
-        const proteinsCalories = food.proteins * 4;
-        const carbohydratesCalories = food.carbohydrates * 4;
-        const fatsCalories = food.fats * 9;
-        const totalCalories = proteinsCalories + carbohydratesCalories + fatsCalories;
+        const proteinsCalories = Math.round(food.proteins * 4);
+        const carbohydratesCalories = Math.round(food.carbohydrates * 4);
+        const fatsCalories = Math.round(food.fats * 9);
+        const totalCalories = Math.round(proteinsCalories + carbohydratesCalories + fatsCalories);
 
         return {
           calories: Math.round(acc.calories + totalCalories),
@@ -40,9 +42,9 @@ export function Header({ meal }: IHeaderProps) {
     )), [meal?.foods]);
 
   const percentages = useMemo(() => {
-    const proteinsCalories = summary.proteins * 4;
-    const carbohydratesCalories = summary.carbohydrates * 4;
-    const fatsCalories = summary.fats * 9;
+    const proteinsCalories = Math.round(summary.proteins * 4);
+    const carbohydratesCalories = Math.round(summary.carbohydrates * 4);
+    const fatsCalories = Math.round(summary.fats * 9);
 
     if (summary.calories === 0) {
       return { proteins: 0, carbohydrates: 0, fats: 0 };
@@ -55,19 +57,15 @@ export function Header({ meal }: IHeaderProps) {
     };
   }, [summary]);
 
-  const isImageInput = true;
-
   return (
     <>
       <StatusBar animated translucent barStyle='light-content' />
 
       <View style={styles.container}>
-        {isImageInput && (
+        {isPictureInput && (
           <ImageBackground
             style={styles.image}
-            source={{
-              uri: 'https://imgs.search.brave.com/YQrwiLzewQO72ljY3QPZQDGbkpmMzBE5_glFZc-Y3ic/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wMi50/cnJzZi5jb20vaW1h/Z2UvZmdldC9jZi83/NzQvMC9pbWFnZXMu/dGVycmEuY29tLzIw/MjAvMDgvMTAvZXN0/cm9nb25vZmUtdHJh/ZGljaW9uYWwtcmFw/aWRvLmpwZw',
-            }}
+            source={{ uri: meal.inputFileURL }}
 
           >
             <LinearGradient
@@ -85,7 +83,7 @@ export function Header({ meal }: IHeaderProps) {
           </ImageBackground>
         )}
 
-        <View style={[styles.content, { marginTop: !isImageInput ? top : 0 }]}>
+        <View style={[styles.content, { marginTop: !isPictureInput ? top : 0 }]}>
           <View style={styles.pageTitleContainer}>
             <Button onPress={goBack} size='icon' variant='ghost'>
               <ChevronLeftIcon size={20} color={theme.colors.white} />
@@ -138,6 +136,16 @@ export function Header({ meal }: IHeaderProps) {
           style={[styles.fatsProgress, { width: `${percentages.fats}%` }]}
         />
       </View>
+
+      <View style={styles.divider} />
+
+      <AppText size='xl' weight='semiBold' style={styles.mealName}>
+        {meal?.name}
+      </AppText>
+
+      <AppText weight='semiBold' style={styles.mealItemsHeader} color={theme.colors.gray[700]}>
+        Itens
+      </AppText>
     </>
   );
 }
