@@ -10,14 +10,16 @@ import { Button } from '@ui/components/Button';
 import { theme } from '@ui/styles/theme';
 
 import { Meal, MealInputType } from '@app/types/Meal';
+import { Skeleton } from '@ui/components/Skeleton';
 import { useMemo } from 'react';
 import { styles } from './styles';
 
 interface IHeaderProps {
+  isLoading: boolean;
   meal: Meal | undefined;
 }
 
-export function Header({ meal }: IHeaderProps) {
+export function Header({ meal, isLoading }: IHeaderProps) {
   const { top } = useSafeAreaInsets();
   const { goBack } = useNavigation();
 
@@ -97,9 +99,16 @@ export function Header({ meal }: IHeaderProps) {
             <AppText color={theme.colors.gray[300]}>
               Calorias
             </AppText>
-            <AppText weight='medium' color={theme.colors.white}>
-              {summary.calories}kcal
-            </AppText>
+            <Skeleton
+              width={61}
+              height={24}
+              colorMode='dark'
+              show={isLoading}
+            >
+              <AppText weight="medium" color={theme.colors.white}>
+                {summary.calories}kcal
+              </AppText>
+            </Skeleton>
           </View>
         </View>
       </View>
@@ -107,41 +116,70 @@ export function Header({ meal }: IHeaderProps) {
       <View style={styles.macrosContainer}>
         <View style={styles.macro}>
           <AppText color={theme.colors.gray[700]}>Proteínas</AppText>
-          <AppText weight='medium' color={theme.colors.support.teal}>
-            {summary.proteins}g ({percentages.proteins}%)
-          </AppText>
+          <Skeleton
+            width={96}
+            show={isLoading}
+          >
+            <AppText weight='medium' color={theme.colors.support.teal}>
+              {summary.proteins}g ({percentages.proteins}%)
+            </AppText>
+          </Skeleton>
         </View>
         <View style={styles.macro}>
           <AppText color={theme.colors.gray[700]}>Carboidratos</AppText>
-          <AppText weight='medium' color={theme.colors.support.yellow}>
-            {summary.carbohydrates}g ({percentages.carbohydrates}%)
-          </AppText>
+          <Skeleton
+            width={96}
+            show={isLoading}
+          >
+            <AppText weight='medium' color={theme.colors.support.yellow}>
+              {summary.carbohydrates}g ({percentages.carbohydrates}%)
+            </AppText>
+          </Skeleton>
         </View>
         <View style={styles.macro}>
           <AppText color={theme.colors.gray[700]}>Gorduras</AppText>
-          <AppText weight='medium' color={theme.colors.support.orange}>
-            {summary.fats}g ({percentages.fats}%)
-          </AppText>
+          <Skeleton
+            width={96}
+            show={isLoading}
+          >
+            <AppText weight='medium' color={theme.colors.support.orange}>
+              {summary.fats}g ({percentages.fats}%)
+            </AppText>
+          </Skeleton>
         </View>
       </View>
 
-      <View style={styles.macrosProgress}>
-        <View
-          style={[styles.proteinsProgress, { width: `${percentages.proteins}%` }]}
-        />
-        <View
-          style={[styles.carbohydratesProgress, { width: `${percentages.carbohydrates}%` }]}
-        />
-        <View
-          style={[styles.fatsProgress, { width: `${percentages.fats}%` }]}
-        />
-      </View>
+      <Skeleton
+        height={4}
+        width="auto"
+        style={styles.macrosProgressContainer}
+        show={isLoading}
+      >
+        <View style={styles.macrosProgress}>
+          <View
+            style={[styles.proteinsProgress, { width: `${percentages.proteins}%` }]}
+          />
+          <View
+            style={[styles.carbohydratesProgress, { width: `${percentages.carbohydrates}%` }]}
+          />
+          <View
+            style={[styles.fatsProgress, { width: `${percentages.fats}%` }]}
+          />
+        </View>
+      </Skeleton>
 
       <View style={styles.divider} />
 
-      <AppText size='xl' weight='semiBold' style={styles.mealName}>
-        {meal?.name}
-      </AppText>
+      <Skeleton
+        height={24}
+        width='50%'
+        style={styles.mealNameContainer}
+        show={isLoading}
+      >
+        <AppText size='xl' weight='semiBold' style={styles.mealName}>
+          {meal?.name}
+        </AppText>
+      </Skeleton>
 
       <AppText weight='semiBold' style={styles.mealItemsHeader} color={theme.colors.gray[700]}>
         Itens
