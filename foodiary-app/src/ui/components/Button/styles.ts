@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 4,
     alignItems: 'center',
   },
 });

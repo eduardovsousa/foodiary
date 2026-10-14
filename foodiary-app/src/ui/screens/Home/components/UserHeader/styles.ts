@@ -20,6 +20,11 @@ export const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
+    backgroundColor: theme.colors.lime[500],
+    borderWidth: 1,
+    borderColor: theme.colors.lime[700],
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   greetings: {
     gap: 2,
